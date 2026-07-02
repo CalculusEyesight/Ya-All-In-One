@@ -1,0 +1,16 @@
+/* The box containing your controls */
+.titled-address-box {
+    -fx-border-color: #555555; /* Dark gray border */
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 7 10 10 10; /* Top padding is large to make room for the label */
+}
+
+/* The label that sits on the line */
+.titled-address-label {
+    -fx-background-color: -fx-background; /* Matches the window background */
+    -fx-padding: 0 5 0 5; /* Space around text so the line doesn't touch it */
+    -fx-text-fill: rgb(0, 0, 0); 
+    -fx-font-size: 11px;
+    -fx-translate-x: 4;
+}
