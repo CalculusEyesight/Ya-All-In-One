@@ -497,7 +497,7 @@ public class Cat {
     }
 
     public void catWriter(Path path){
-         try(FileChannel channel = FileChannel.open(path, StandardOpenOption.WRITE,StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING)) {
+            try(FileChannel channel = FileChannel.open(path, StandardOpenOption.WRITE,StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING)) {
                 int entriesOffset=12;
                 ByteBuffer byteBuffer=ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN);
                 ByteBuffer shortBuffer=ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN);
