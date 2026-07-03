@@ -1456,8 +1456,8 @@ public class Bcm {
         holdDownConditionsGridPane.add(chargeTypeBoxStackPane,0,1);
         //ChargeType
 
-        //Options 5
-        Label option6Label = new Label("Option 5");
+        //Options 6
+        Label option6Label = new Label("Option 6");
         option6Label.getStyleClass().add("titled-address-label");
 
 
