@@ -40,14 +40,12 @@ public class Bcm {
     
     TabPane tabPane=new TabPane();
 
-    
     int entryIndex;
 
     //arraylists for input
     ArrayList<Long> getDirectionalInputs = new ArrayList<>(); 
     ArrayList<Long> getButtonInputs = new ArrayList<>(); 
     ArrayList<Long> getHoldDownConditions= new ArrayList<>();
-
 
     //arraylists for activator
     ArrayList<Long> getOpponentSizeConditions = new ArrayList<>();       
@@ -90,7 +88,6 @@ public class Bcm {
     private long copyButtonInputs;
     private long copyHoldDownConditions;
     
-
     // Activator variables
     private long copyOpponentSizeConditions;
     private int copyMinimumLoopDuration;
@@ -126,7 +123,6 @@ public class Bcm {
     private long copyUnknown88;
     private long copyUnknown104;
   
-
     public Bcm(){
         entriesActionListener();
         entriesKeysListener();
@@ -142,8 +138,6 @@ public class Bcm {
         splitPane.getStylesheets().add(css); 
         return splitPane;
     }
-
-  
 
     public void createTabs(){
         if (tabPane.getTabs().isEmpty()) {
@@ -4220,7 +4214,7 @@ public class Bcm {
 
             for(int i=0;i<entries;i++){
                 
-                int entryStartOffset = 16 + (112 * i);
+                int entryStartOffset = 16 + (i * 112);
                 int siblingOffset = entryStartOffset + 48;
                 int childOffset = entryStartOffset + 52;
                 

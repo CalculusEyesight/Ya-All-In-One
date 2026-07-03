@@ -20,6 +20,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -42,7 +43,7 @@ public class Emb {
     HBox hBox=new HBox();
     Emb(){
         entriesActionListener();
-
+        entriesKeysListener();
     }
 
     public VBox createVBox(){
@@ -160,6 +161,25 @@ public class Emb {
                 });
             }
         });
+    }
+
+    private void entriesKeysListener(){
+        listView.setOnKeyPressed(e->{
+            if(e.getCode()==KeyCode.DELETE){
+                Delete();
+            }
+            if(e.isControlDown()&&e.getCode()==KeyCode.A){
+                Append();
+                
+            }
+            if(e.isControlDown()&&e.getCode()==KeyCode.I){
+                Insert();
+            }
+            if(e.isControlDown()&&e.getCode()==KeyCode.R){
+                Replace();;
+            }
+        });
+
     }
 
     private void Delete(){ 

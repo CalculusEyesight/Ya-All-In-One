@@ -135,7 +135,6 @@ public class Main extends Application {
                                         er.printStackTrace();
                                     }
                                 });
-
                                 break;
 
                             case "bdm":
@@ -163,6 +162,32 @@ public class Main extends Application {
                                     }
                                 });
                                 break;
+                            case "cat":
+                                Tab tabCat = new Tab();
+                                tabCat.setClosable(false);
+                                tabCat.setText(xv2File.getName());
+
+                                tabPane.getTabs().add(tabCat); 
+
+                                Cat cat = new Cat();
+                                FileTypeRecall.put(xv2File.getAbsolutePath(), cat);
+
+                                executorService.submit(() -> {
+                                    try {
+                                        
+                                        cat.catReader(xv2File.toPath()); 
+                                        
+                                        Platform.runLater(() -> {
+              
+                                            tabCat.setContent(cat.createHBoxOuter());
+                                        });
+
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
+                                    }
+                                });
+                                break;
+
                             case "emb","EMB":
                                 Tab tabEmb=new Tab();
                                 tabEmb.setClosable(false);
@@ -232,6 +257,13 @@ public class Main extends Application {
                         Bdm bdm=(Bdm) FileTypeRecall.get(originalPath);
                         executorService.submit(()->{
                             bdm.bdmWriter(selectedDirectory.toPath().resolve(originalFile.getName()));
+                        });
+                        hasSaved=true;
+                        break;
+                    case "cat":
+                        Cat cat=(Cat) FileTypeRecall.get(originalPath);
+                        executorService.submit(()->{
+                            cat.catWriter(selectedDirectory.toPath().resolve(originalFile.getName()));
                         });
                         hasSaved=true;
                         break;
