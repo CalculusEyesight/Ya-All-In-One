@@ -55,32 +55,32 @@ public class Bcm {
     ArrayList<Long> getActivatorState = new ArrayList<>();
 
     //arraylists for BAC
-    ArrayList<Integer> getBACEntryPrimary = new ArrayList<>();
-    ArrayList<Integer> getBACEntryCharge = new ArrayList<>();
-    ArrayList<Integer> getBACEntryUserConnect = new ArrayList<>();
-    ArrayList<Integer> getBACEntryVictimConnect = new ArrayList<>();
-    ArrayList<Integer> getBACEntryAirborne = new ArrayList<>();
+    ArrayList<Short> getBACEntryPrimary = new ArrayList<>();
+    ArrayList<Short> getBACEntryCharge = new ArrayList<>();
+    ArrayList<Short> getBACEntryUserConnect = new ArrayList<>();
+    ArrayList<Short> getBACEntryVictimConnect = new ArrayList<>();
+    ArrayList<Short> getBACEntryAirborne = new ArrayList<>();
     ArrayList<Integer> getBACEntryTargetingOverride = new ArrayList<>();
-    ArrayList<Short> getBACRandomFlags = new ArrayList<>();
+    ArrayList<Integer> getBACRandomFlags = new ArrayList<>();
 
     //arraylists for misc
-    ArrayList<Double> getKiCost = new ArrayList<>();                   
-    ArrayList<Double> getReceiverLinkId = new ArrayList<>();            
-    ArrayList<Double> getStaminaCost = new ArrayList<>();               
-    ArrayList<Double> getKiRequired = new ArrayList<>();                 
-    ArrayList<Double> getHealthRequired = new ArrayList<>();            
-    ArrayList<Integer> getTransformationStage = new ArrayList<>();       
-    ArrayList<Integer> getCusAura = new ArrayList<>();                   
+    ArrayList<Long> getKiCost = new ArrayList<>();                   
+    ArrayList<Long> getReceiverLinkId = new ArrayList<>();            
+    ArrayList<Long> getStaminaCost = new ArrayList<>();               
+    ArrayList<Long> getKiRequired = new ArrayList<>();                 
+    ArrayList<Float> getHealthRequired = new ArrayList<>();            
+    ArrayList<Short> getTransformationStage = new ArrayList<>();       
+    ArrayList<Short> getCusAura = new ArrayList<>();                   
     ArrayList<Long> getRaceGender = new ArrayList<>();
     
     //arraylist for unknown
     ArrayList<Long> getUnknown0 = new ArrayList<>();
-    ArrayList<Short>getUnknown36=new ArrayList<>();
-    ArrayList<Long>getUnknown68=new ArrayList<>();
-    ArrayList<Long>getUnknown72=new ArrayList<>();
-    ArrayList<Long>getUnknown80=new ArrayList<>();
-    ArrayList<Long>getUnknown88=new ArrayList<>();
-    ArrayList<Long>getUnknown104=new ArrayList<>();
+    ArrayList<Short> getUnknown36 = new ArrayList<>();
+    ArrayList<Long> getUnknown68 = new ArrayList<>();
+    ArrayList<Long> getUnknown72 = new ArrayList<>();
+    ArrayList<Long> getUnknown80 = new ArrayList<>();
+    ArrayList<Long> getUnknown88 = new ArrayList<>();
+    ArrayList<Long> getUnknown104 = new ArrayList<>();
 
     //copycontainers
     // Input variables
@@ -96,22 +96,22 @@ public class Bcm {
     private long copyActivatorState;
 
     // BAC variables
-    private int copyBACEntryPrimary;
-    private int copyBACEntryCharge;
-    private int copyBACEntryUserConnect;
-    private int copyBACEntryVictimConnect;
-    private int copyBACEntryAirborne;
+    private short copyBACEntryPrimary;
+    private short copyBACEntryCharge;
+    private short copyBACEntryUserConnect;
+    private short copyBACEntryVictimConnect;
+    private short copyBACEntryAirborne;
     private int copyBACEntryTargetingOverride;
-    private short copyBACRandomFlags;
+    private int copyBACRandomFlags;
 
     // Misc variables
-    private double copyKiCost;
-    private double copyReceiverLinkId;
-    private double copyStaminaCost;
-    private double copyKiRequired;
-    private double copyHealthRequired;
-    private int copyTransformationStage;
-    private int copyCusAura;
+    private long copyKiCost;
+    private long copyReceiverLinkId;
+    private long copyStaminaCost;
+    private long copyKiRequired;
+    private float copyHealthRequired;
+    private short copyTransformationStage;
+    private short copyCusAura;
     private long copyRaceGender;
 
     // Unknown variables
@@ -3127,10 +3127,10 @@ public class Bcm {
         
         Spinner<Integer> BACEntryPrimarySpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryPrimarySpinner.setEditable(true);
-        BACEntryPrimarySpinner.getValueFactory().setValue(getBACEntryPrimary.get(i));
+        BACEntryPrimarySpinner.getValueFactory().setValue((int)getBACEntryPrimary.get(i));
         BACEntryPrimarySpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryPrimary.set(i, newValue);
+                getBACEntryPrimary.set(i, newValue.shortValue());
             }
 
         });
@@ -3147,10 +3147,10 @@ public class Bcm {
 
         Spinner<Integer> BACEntryChargeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryChargeSpinner.setEditable(true);
-        BACEntryChargeSpinner.getValueFactory().setValue(getBACEntryCharge.get(i));
+        BACEntryChargeSpinner.getValueFactory().setValue((int)getBACEntryCharge.get(i));
         BACEntryChargeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryCharge.set(i, newValue);
+                getBACEntryCharge.set(i, newValue.shortValue());
             }
 
         });
@@ -3167,10 +3167,10 @@ public class Bcm {
 
         Spinner<Integer> BACEntryUserConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryUserConnectSpinner.setEditable(true);
-        BACEntryUserConnectSpinner.getValueFactory().setValue(getBACEntryUserConnect.get(i));
+        BACEntryUserConnectSpinner.getValueFactory().setValue((int)getBACEntryUserConnect.get(i));
         BACEntryUserConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryUserConnect.set(i, newValue);
+                getBACEntryUserConnect.set(i, newValue.shortValue());
             }
 
         });
@@ -3188,10 +3188,10 @@ public class Bcm {
 
         Spinner<Integer> BACEntryVictimConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryVictimConnectSpinner.setEditable(true);
-        BACEntryVictimConnectSpinner.getValueFactory().setValue(getBACEntryVictimConnect.get(i));
+        BACEntryVictimConnectSpinner.getValueFactory().setValue((int)getBACEntryVictimConnect.get(i));
         BACEntryVictimConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryVictimConnect.set(i, newValue);
+                getBACEntryVictimConnect.set(i, newValue.shortValue());
             }
 
         });
@@ -3208,10 +3208,10 @@ public class Bcm {
 
         Spinner<Integer> BACEntryAirborneSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryAirborneSpinner.setEditable(true);
-        BACEntryAirborneSpinner.getValueFactory().setValue(getBACEntryAirborne.get(i));
+        BACEntryAirborneSpinner.getValueFactory().setValue((int)getBACEntryAirborne.get(i));
         BACEntryAirborneSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryAirborne.set(i, newValue);
+                getBACEntryAirborne.set(i, newValue.shortValue());
             }
 
         });
@@ -3306,34 +3306,34 @@ public class Bcm {
             if(newValue.isSelected()){
                 RadioButton selectedRadio = (RadioButton) newValue;
                 if (selectedRadio == none) { 
-                    getBACRandomFlags.set(i, (short)0);
+                    getBACRandomFlags.set(i, 0);
                 }
                 else if (selectedRadio == randomBACEntry) { 
-                    getBACRandomFlags.set(i, (short)1);
+                    getBACRandomFlags.set(i, 1);
                 }
                 else if (selectedRadio == noTargetCorrection) { 
-                    getBACRandomFlags.set(i, (short)2);
+                    getBACRandomFlags.set(i, 2);
                 }
                 else if (selectedRadio == threeInstanceSetup) { 
-                    getBACRandomFlags.set(i, (short)3);
+                    getBACRandomFlags.set(i, 3);
                 }
                 else if (selectedRadio == unknown4) { 
-                    getBACRandomFlags.set(i, (short)4);
+                    getBACRandomFlags.set(i, 4);
                 }
                 else if (selectedRadio == unknown5) { 
-                    getBACRandomFlags.set(i, (short)5);
+                    getBACRandomFlags.set(i, 5);
                 }
                 else if (selectedRadio == unknown6) { 
-                    getBACRandomFlags.set(i, (short)6);
+                    getBACRandomFlags.set(i, 6);
                 }
                 else if (selectedRadio == unknown7) { 
-                    getBACRandomFlags.set(i, (short)7);
+                    getBACRandomFlags.set(i, 7);
                 }
                 else if (selectedRadio == unknown8) { 
-                    getBACRandomFlags.set(i, (short)8);
+                    getBACRandomFlags.set(i, 8);
                 }
                 else if (selectedRadio == unknown9) { 
-                    getBACRandomFlags.set(i, (short)9);
+                    getBACRandomFlags.set(i, 9);
                 }
             }
         });
@@ -3373,10 +3373,10 @@ public class Bcm {
 
         Spinner<Double> kiCostSpinner=new Spinner<>(0,4294967295.0,0);
         kiCostSpinner.setEditable(true);
-        kiCostSpinner.getValueFactory().setValue(getKiCost.get(i));
+        kiCostSpinner.getValueFactory().setValue((double)getKiCost.get(i));
         kiCostSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getKiCost.set(i, newValue);
+                getKiCost.set(i, newValue.longValue());
             }
 
         });
@@ -3393,10 +3393,10 @@ public class Bcm {
 
         Spinner<Double> receiverLinkIdSpinner=new Spinner<>(0,4294967295.0,0);
         receiverLinkIdSpinner.setEditable(true);
-        receiverLinkIdSpinner.getValueFactory().setValue(getReceiverLinkId.get(i));
+        receiverLinkIdSpinner.getValueFactory().setValue((double)getReceiverLinkId.get(i));
         receiverLinkIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getReceiverLinkId.set(i, newValue);
+                getReceiverLinkId.set(i, newValue.longValue());
             }
         });
 
@@ -3412,10 +3412,10 @@ public class Bcm {
 
         Spinner<Double> staminaCostSpinner=new Spinner<>(0,4294967295.0,0);
         staminaCostSpinner.setEditable(true);
-        staminaCostSpinner.getValueFactory().setValue(getStaminaCost.get(i));
+        staminaCostSpinner.getValueFactory().setValue((double)getStaminaCost.get(i));
         staminaCostSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getStaminaCost.set(i, newValue);
+                getStaminaCost.set(i, newValue.longValue());
             }
         });
         
@@ -3431,10 +3431,10 @@ public class Bcm {
 
         Spinner<Double> kiRequiredSpinner=new Spinner<>(0,4294967295.0,0);
         kiRequiredSpinner.setEditable(true);
-        kiRequiredSpinner.getValueFactory().setValue(getKiRequired.get(i));
+        kiRequiredSpinner.getValueFactory().setValue((double)getKiRequired.get(i));
         kiRequiredSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getKiRequired.set(i, newValue);
+                getKiRequired.set(i, newValue.longValue());
             }
         });
 
@@ -3450,10 +3450,10 @@ public class Bcm {
 
         Spinner<Double> healthRequiredSpinner=new Spinner<>(Float.MIN_VALUE,Float.MAX_VALUE,0.0);
         healthRequiredSpinner.setEditable(true);
-        healthRequiredSpinner.getValueFactory().setValue(getHealthRequired.get(i));
+        healthRequiredSpinner.getValueFactory().setValue((double)getHealthRequired.get(i));
         healthRequiredSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getHealthRequired.set(i, newValue);
+                getHealthRequired.set(i, newValue.floatValue());
             }
         });
 
@@ -3469,10 +3469,10 @@ public class Bcm {
 
         Spinner<Integer> transformationStageSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         transformationStageSpinner.setEditable(true);
-        transformationStageSpinner.getValueFactory().setValue(getTransformationStage.get(i));
+        transformationStageSpinner.getValueFactory().setValue((int)getTransformationStage.get(i));
         transformationStageSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getTransformationStage.set(i, newValue);
+                getTransformationStage.set(i, newValue.shortValue());
             }
         });
 
@@ -3488,10 +3488,10 @@ public class Bcm {
 
         Spinner<Integer> cusAuraSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         cusAuraSpinner.setEditable(true);
-        cusAuraSpinner.getValueFactory().setValue(getTransformationStage.get(i));
+        cusAuraSpinner.getValueFactory().setValue((int)getTransformationStage.get(i));
         cusAuraSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getTransformationStage.set(i, newValue);
+                getTransformationStage.set(i, newValue.shortValue());
             }
         });
         cusAuraHBox.getChildren().addAll(cusAuraLabel,cusAuraSpinner);
@@ -4019,20 +4019,20 @@ public class Bcm {
             getMaximumLoopDuration.add(treeView.getRow(currentEntry) + 1, 0);
             getPrimaryActivatorConditions.add(treeView.getRow(currentEntry) + 1, 0L);
             getActivatorState.add(treeView.getRow(currentEntry) + 1, 0L);
-            getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, 0);
+            getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, (short)0);
+            getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, (short)0);
+            getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
+            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
+            getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, (short)0);
             getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getKiCost.add(treeView.getRow(currentEntry) + 1, 0.0);
-            getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0.0);
-            getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0.0);
-            getKiRequired.add(treeView.getRow(currentEntry) + 1, 0.0);
-            getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0.0);
-            getTransformationStage.add(treeView.getRow(currentEntry) + 1, 0);
-            getCusAura.add(treeView.getRow(currentEntry) + 1, 0);
+            getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, 0);
+            getKiCost.add(treeView.getRow(currentEntry) + 1, 0L);
+            getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0L);
+            getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0L);
+            getKiRequired.add(treeView.getRow(currentEntry) + 1, 0L);
+            getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0f);
+            getTransformationStage.add(treeView.getRow(currentEntry) + 1, (short)0);
+            getCusAura.add(treeView.getRow(currentEntry) + 1, (short)0);
             getRaceGender.add(treeView.getRow(currentEntry) + 1, 0L);
             getUnknown0.add(treeView.getRow(currentEntry) + 1, 0L);
             getUnknown36.add(treeView.getRow(currentEntry) + 1, (short)0);
@@ -4063,20 +4063,20 @@ public class Bcm {
             getMaximumLoopDuration.add(treeView.getRow(currentEntry) - 1, 0);
             getPrimaryActivatorConditions.add(treeView.getRow(currentEntry) - 1, 0L);
             getActivatorState.add(treeView.getRow(currentEntry) - 1, 0L);
-            getBACEntryPrimary.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACEntryCharge.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACEntryUserConnect.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACEntryAirborne.add(treeView.getRow(currentEntry) - 1, 0);
+            getBACEntryPrimary.add(treeView.getRow(currentEntry) - 1, (short)0);
+            getBACEntryCharge.add(treeView.getRow(currentEntry) - 1, (short)0);
+            getBACEntryUserConnect.add(treeView.getRow(currentEntry) - 1, (short)0);
+            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) - 1, (short)0);
+            getBACEntryAirborne.add(treeView.getRow(currentEntry) - 1, (short)0);
             getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACRandomFlags.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getKiCost.add(treeView.getRow(currentEntry) - 1, 0.0);
-            getReceiverLinkId.add(treeView.getRow(currentEntry) - 1, 0.0);
-            getStaminaCost.add(treeView.getRow(currentEntry) - 1, 0.0);
-            getKiRequired.add(treeView.getRow(currentEntry) - 1, 0.0);
-            getHealthRequired.add(treeView.getRow(currentEntry) - 1, 0.0);
-            getTransformationStage.add(treeView.getRow(currentEntry) - 1, 0);
-            getCusAura.add(treeView.getRow(currentEntry) - 1, 0);
+            getBACRandomFlags.add(treeView.getRow(currentEntry) - 1, 0);
+            getKiCost.add(treeView.getRow(currentEntry) - 1, 0L);
+            getReceiverLinkId.add(treeView.getRow(currentEntry) - 1, 0L);
+            getStaminaCost.add(treeView.getRow(currentEntry) - 1, 0L);
+            getKiRequired.add(treeView.getRow(currentEntry) - 1, 0L);
+            getHealthRequired.add(treeView.getRow(currentEntry) - 1, 0f);
+            getTransformationStage.add(treeView.getRow(currentEntry) - 1, (short)0);
+            getCusAura.add(treeView.getRow(currentEntry) - 1, (short)0);
             getRaceGender.add(treeView.getRow(currentEntry) - 1, 0L);
             getUnknown0.add(treeView.getRow(currentEntry) - 1, 0L);
             getUnknown36.add(treeView.getRow(currentEntry) - 1, (short)0);
@@ -4114,22 +4114,22 @@ public class Bcm {
         getActivatorState.add(treeView.getRow(currentEntry) + 1, 0L);
 
         // 3. Insert default data into the BAC lists
-        getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, 0);
+        getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, (short)0);
         getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, 0);
 
         // 4. Insert default data into the Misc lists
-        getKiCost.add(treeView.getRow(currentEntry) + 1, 0.0);
-        getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0.0);
-        getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0.0);
-        getKiRequired.add(treeView.getRow(currentEntry) + 1, 0.0);
-        getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0.0);
-        getTransformationStage.add(treeView.getRow(currentEntry) + 1, 0);
-        getCusAura.add(treeView.getRow(currentEntry) + 1, 0);
+        getKiCost.add(treeView.getRow(currentEntry) + 1, 0L);
+        getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0L);
+        getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0L);
+        getKiRequired.add(treeView.getRow(currentEntry) + 1, 0L);
+        getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0f);
+        getTransformationStage.add(treeView.getRow(currentEntry) + 1, (short)0);
+        getCusAura.add(treeView.getRow(currentEntry) + 1, (short)0);
         getRaceGender.add(treeView.getRow(currentEntry) + 1, 0L);
 
         // 5. Insert default data into the Unknown lists
@@ -4277,13 +4277,13 @@ public class Bcm {
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryPrimary.add((int)shortBuffer.getShort());
+                getBACEntryPrimary.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+34);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryCharge.add((int)shortBuffer.getShort());
+                getBACEntryCharge.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+36);
                 shortBuffer.clear();
@@ -4295,31 +4295,31 @@ public class Bcm {
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryUserConnect.add((int)shortBuffer.getShort());
+                getBACEntryUserConnect.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+40);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryVictimConnect.add((int)shortBuffer.getShort());
+                getBACEntryVictimConnect.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+42);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryAirborne.add((int)shortBuffer.getShort());
+                getBACEntryAirborne.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+44);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryTargetingOverride.add((int)shortBuffer.getShort());
+                getBACEntryTargetingOverride.add(toUShort(shortBuffer.getShort()));
                 
                 channel.position(entryStartOffset+46);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACRandomFlags.add(shortBuffer.getShort());
+                getBACRandomFlags.add(toUShort(shortBuffer.getShort()));
                
                 channel.position(siblingOffset);
                 intBuffer.clear();
@@ -4350,7 +4350,7 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiCost.add((double)intBuffer.getInt());
+                getKiCost.add(toUint32(intBuffer.getInt()));
 
                 channel.position(entryStartOffset+68);
                 intBuffer.clear();
@@ -4368,7 +4368,7 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getReceiverLinkId.add((double)toUint32(intBuffer.getInt()));
+                getReceiverLinkId.add(toUint32(intBuffer.getInt()));
 
                 channel.position(entryStartOffset+80);
                 intBuffer.clear();
@@ -4380,7 +4380,7 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getStaminaCost.add((double)toUint32(intBuffer.getInt()));
+                getStaminaCost.add(toUint32(intBuffer.getInt()));
 
                 channel.position(entryStartOffset+88);
                 intBuffer.clear();
@@ -4392,25 +4392,25 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiRequired.add((double)toUint32(intBuffer.getInt()));
+                getKiRequired.add(toUint32(intBuffer.getInt()));
 
                 channel.position(entryStartOffset+96);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getHealthRequired.add((double)intBuffer.getFloat());
+                getHealthRequired.add(intBuffer.getFloat());
 
                 channel.position(entryStartOffset+100);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getTransformationStage.add((int)shortBuffer.getShort());
+                getTransformationStage.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+102);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getCusAura.add((int)shortBuffer.getShort());
+                getCusAura.add(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+104);
                 intBuffer.clear();
@@ -4526,37 +4526,37 @@ public class Bcm {
 
                 channel.position(entryStartOffset+32);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryPrimary.get(i).shortValue());
+                shortBuffer.putShort(getBACEntryPrimary.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+34);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryCharge.get(i).shortValue());
+                shortBuffer.putShort(getBACEntryCharge.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+36);
                 shortBuffer.clear();
-                shortBuffer.putShort((getUnknown36.get(i)));
+                shortBuffer.putShort(getUnknown36.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+38);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryUserConnect.get(i).shortValue());
+                shortBuffer.putShort(getBACEntryUserConnect.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+40);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryVictimConnect.get(i).shortValue());
+                shortBuffer.putShort(getBACEntryVictimConnect.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+42);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryAirborne.get(i).shortValue());
+                shortBuffer.putShort(getBACEntryAirborne.get(i));
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
@@ -4604,7 +4604,7 @@ public class Bcm {
                     intBuffer.flip();
                     channel.write(intBuffer);
                 }
-                else if(allEntries.indexOf(allEntries.get(i).getParent())!=0&&i!=0){
+                else if(allEntries.indexOf(allEntries.get(i).getParent())!=0 && i!=0){
                     intBuffer.putInt(allEntries.indexOf(allEntries.get(i).getParent())*112+16);
                     intBuffer.flip();
                     channel.write(intBuffer);
@@ -4670,19 +4670,19 @@ public class Bcm {
 
                 channel.position(entryStartOffset+96);
                 intBuffer.clear();
-                intBuffer.putFloat(getHealthRequired.get(i).floatValue());
+                intBuffer.putFloat(getHealthRequired.get(i));
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+100);
                 intBuffer.clear();
-                intBuffer.putInt(getTransformationStage.get(i).intValue());
+                intBuffer.putInt(getTransformationStage.get(i));
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+102);
                 intBuffer.clear();
-                intBuffer.putInt(getCusAura.get(i).intValue());
+                intBuffer.putInt(getCusAura.get(i));
                 intBuffer.flip();
                 channel.write(intBuffer);
 
