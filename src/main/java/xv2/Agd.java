@@ -74,7 +74,6 @@ class Agd {
                 return;
             }
             try {
-                //int indexOfHBox = vBox.getChildren().indexOf(txtLevel.getParent());
                 entry.level= Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -89,7 +88,6 @@ class Agd {
                 return;
             }
             try {
-                //int indexOfHBox = vBox.getChildren().indexOf(txtXpToNextLevel.getParent());
                 entry.xpToNextLevel= Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -102,7 +100,6 @@ class Agd {
                 return;
             }
             try {
-                //int indexOfHBox = vBox.getChildren().indexOf(txtXpToThisLevel.getParent());
                 entry.xpToThisLevel = Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -116,7 +113,6 @@ class Agd {
                 return;
             }
             try {
-                //int indexOfHBox = vBox.getChildren().indexOf(txtAttributePointsGained.getParent());
                 entry.attributePointsGained= Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
