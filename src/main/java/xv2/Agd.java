@@ -129,8 +129,7 @@ class Agd {
        return vBox;
     }
     private void vBoxListener(){
-        vBox.addEventFilter(MouseEvent.ANY, event -> {
-        });
+        vBox.addEventFilter(MouseEvent.ANY, event -> {});
     }
 
     public void agdReader(Path path){
