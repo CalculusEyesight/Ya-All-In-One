@@ -28,33 +28,14 @@ import javafx.scene.layout.VBox;
 public class Aur {
     VBox vBox = new VBox(5);
     ArrayList<String> allEntries;
-    ArrayList<Integer> getI04=new ArrayList<>();
-    ArrayList<Integer> getBoostStart=new ArrayList<>();
-    ArrayList<Integer> getBoostLoop=new ArrayList<>();
-    ArrayList<Integer> getBoostEnd=new ArrayList<>();
-    ArrayList<Integer> getKiaiCharge=new ArrayList<>();
-    ArrayList<Integer> getKiryokuMax=new ArrayList<>();
-    ArrayList<Integer> getHenshinStart=new ArrayList<>();
-    ArrayList<Integer> getHenshinEnd=new ArrayList<>();
-
-    ArrayList<Integer> getCharaId=new ArrayList<>();
-    ArrayList<Integer> getCostume=new ArrayList<>();
-    ArrayList<Integer> getAuraId=new ArrayList<>();
-    ArrayList<Boolean> getGlare=new ArrayList<>();
+    
+    ArrayList<AurAuraEntry> auraEntries = new ArrayList<>();
+    ArrayList<AurCharaEntry> charaEntries = new ArrayList<>();
 
     ListView<String> listView=new ListView<>();
-
     HBox hBox=new HBox(10);
 
-    //copy containers
-    private int copyI04;
-    private int copyBoostStart;
-    private int copyBoostLoop;
-    private int copyBoostEnd;
-    private int copyKiaiCharge;
-    private int copyKiryokuMax;
-    private int copyHenshinStart;
-    private int copyHenshinEnd;
+    private AurAuraEntry copyContainer = null;
     
     int characterEntries;
     
@@ -68,7 +49,6 @@ public class Aur {
        SplitPane splitPane =new SplitPane(createHBoxLeft(),createVBoxRight());
        splitPane.setDividerPositions(0.43);
        return splitPane;
-        
     }
 
     private HBox createHBoxLeft(){
@@ -77,21 +57,20 @@ public class Aur {
         return hBox;
     }
 
-    private VBox createVBoxAuraId(int i){
-        
+    private VBox createVBoxAuraId(AurAuraEntry entry){
         VBox auraIdVBox=new VBox(60);
         auraIdVBox.setPadding(new Insets(30,0,0,0));
 
         HBox i04HBox=new HBox(40);
         Label lblI04=new Label("I_04: ");
         lblI04.setPrefWidth(80);
-        TextField txtI04=new TextField(String.valueOf(getI04.get(i)));
+        TextField txtI04=new TextField(String.valueOf(entry.i04));
         txtI04.textProperty().addListener((obs,oldText,newText)->{
             if (txtI04.getText().contains("-")) {
                 return;
             }
             try {
-                getI04.set(i, Integer.parseInt(newText)); 
+                entry.i04 = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -102,13 +81,13 @@ public class Aur {
         HBox boostStartHBox=new HBox(40);
         Label lblBoostStart=new Label("BoostStart: ");
         lblBoostStart.setPrefWidth(80);
-        TextField txtBoostStart=new TextField(String.valueOf(getBoostStart.get(i)));
+        TextField txtBoostStart=new TextField(String.valueOf(entry.boostStart));
         txtBoostStart.textProperty().addListener((obs,oldText,newText)->{
             if (txtBoostStart.getText().contains("-")) {
                 return;
             }
             try {
-                getBoostStart.set(i, Integer.parseInt(newText)); 
+                entry.boostStart = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -119,13 +98,13 @@ public class Aur {
         HBox boostLoopHBox=new HBox(40);
         Label lblBoostLoop=new Label("BoostLoop: ");
         lblBoostLoop.setPrefWidth(80);
-        TextField txtBoostLoop=new TextField(String.valueOf(getBoostLoop.get(i)));
+        TextField txtBoostLoop=new TextField(String.valueOf(entry.boostLoop));
         txtBoostLoop.textProperty().addListener((obs,oldText,newText)->{
             if (txtBoostLoop.getText().contains("-")) {
                 return;
             }
             try {
-                getBoostLoop.set(i, Integer.parseInt(newText)); 
+                entry.boostLoop = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -136,13 +115,13 @@ public class Aur {
         HBox boostEndHBox=new HBox(40);
         Label lblBoostEnd=new Label("BoostEnd: ");
         lblBoostEnd.setPrefWidth(80);
-        TextField txtBoostEnd=new TextField(String.valueOf(getBoostEnd.get(i)));
+        TextField txtBoostEnd=new TextField(String.valueOf(entry.boostEnd));
         txtBoostEnd.textProperty().addListener((obs,oldText,newText)->{
             if (txtBoostEnd.getText().contains("-")) {
                 return;
             }
             try {
-                getBoostEnd.set(i, Integer.parseInt(newText)); 
+                entry.boostEnd = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -153,13 +132,13 @@ public class Aur {
         HBox kiaiChargeHBox=new HBox(40);
         Label lblKiaiCharge=new Label("KiaiCharge: ");
         lblKiaiCharge.setPrefWidth(80);
-        TextField txtKiaiCharge=new TextField(String.valueOf(getKiaiCharge.get(i)));
+        TextField txtKiaiCharge=new TextField(String.valueOf(entry.kiaiCharge));
         txtKiaiCharge.textProperty().addListener((obs,oldText,newText)->{
             if (txtKiaiCharge.getText().contains("-")) {
                 return;
             }
             try {
-                getKiaiCharge.set(i, Integer.parseInt(newText)); 
+                entry.kiaiCharge = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -170,13 +149,13 @@ public class Aur {
         HBox kiryokuMaxHBox=new HBox(40);
         Label lblKiryokuMax=new Label("KiryokuMax: ");
         lblKiryokuMax.setPrefWidth(80);
-        TextField txtKiryokuMax=new TextField(String.valueOf(getKiryokuMax.get(i)));
+        TextField txtKiryokuMax=new TextField(String.valueOf(entry.kiaiCharge));
         txtKiryokuMax.textProperty().addListener((obs,oldText,newText)->{
             if (txtKiryokuMax.getText().contains("-")) {
                 return;
             }
             try {
-                getKiryokuMax.set(i, Integer.parseInt(newText)); 
+                entry.kiaiCharge = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -187,13 +166,13 @@ public class Aur {
         HBox henshinStartHBox=new HBox(40);
         Label lblHenshinStart=new Label("HenshinStart: ");
         lblHenshinStart.setPrefWidth(80);
-        TextField txtHenshinStart=new TextField(String.valueOf(getHenshinStart.get(i)));
+        TextField txtHenshinStart=new TextField(String.valueOf(entry.henshinStart));
         txtHenshinStart.textProperty().addListener((obs,oldText,newText)->{
             if (txtHenshinStart.getText().contains("-")) {
                 return;
             }
             try {
-                getHenshinStart.set(i, Integer.parseInt(newText)); 
+                entry.henshinStart = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -204,13 +183,13 @@ public class Aur {
         HBox henshinEndHBox=new HBox(40);
         Label lblHenshinEnd=new Label("HenshinEnd: ");
         lblHenshinEnd.setPrefWidth(80);
-        TextField txtHenshinEnd=new TextField(String.valueOf(getHenshinEnd.get(i)));
+        TextField txtHenshinEnd=new TextField(String.valueOf(entry.henshinEnd));
         txtHenshinEnd.textProperty().addListener((obs,oldText,newText)->{
             if (txtHenshinEnd.getText().contains("-")) {
                 return;
             }
             try {
-                getHenshinEnd.set(i, Integer.parseInt(newText)); 
+                entry.henshinEnd = Integer.parseInt(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -239,22 +218,17 @@ public class Aur {
     private ToolBar createToolBarRight(){
         Button insertEntry=new Button("Insert Chara Id");
         insertEntry.setOnAction(event->{
-            getCharaId.add(0);
-            getCostume.add(0);
-            getAuraId.add(0);
-            getGlare.add(false);
-            createVBoxRightCharaId();
+            AurCharaEntry newCharaEntry = new AurCharaEntry();
+            charaEntries.add(newCharaEntry);
+            createVBoxRightCharaId(newCharaEntry);
             characterEntries+=1;
         });
 
         Button removeEntry=new Button("Remove Chara Id");
         removeEntry.setOnAction(event->{
             try {
-                getCharaId.remove(characterEntries-1);
-                getCostume.remove(characterEntries-1);
-                getAuraId.remove(characterEntries-1);
-                getGlare.remove(characterEntries-1);
-                vBox.getChildren().remove(characterEntries);
+                charaEntries.remove(characterEntries-1);
+                vBox.getChildren().remove(characterEntries-1);
                 characterEntries-=1;
             } catch (IndexOutOfBoundsException e) {
                 Popups.ErrorOutOfBounds();
@@ -269,46 +243,43 @@ public class Aur {
         return toolBar;
     }
     
-    private VBox createVBoxRightCharaId(){
+    private VBox createVBoxRightCharaId(AurCharaEntry entry){
         HBox hBox=new HBox(10);
 
         Label lblCharaId=new Label("Chara Id");
-        TextField txtCharaId=new TextField(String.valueOf(getCharaId.getLast()));
+        TextField txtCharaId=new TextField(String.valueOf(entry.charaId));
         txtCharaId.textProperty().addListener((obs,oldText,newText)->{
             if (txtCharaId.getText().contains("-")) {
                 return;
             }
             try {
-                int indexOfHBox = vBox.getChildren().indexOf(txtCharaId.getParent());
-                getCharaId.set(indexOfHBox, Integer.parseInt(newText));
+                entry.charaId = Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         });
 
         Label lblCostume=new Label("Costume");
-        TextField txtCostume=new TextField(String.valueOf(getCostume.getLast()));
+        TextField txtCostume=new TextField(String.valueOf(entry.costume));
         txtCostume.textProperty().addListener((obs,oldText,newText)->{
             if (txtCharaId.getText().contains("-")) {
                 return;
             }
             try {
-                int indexOfHBox = vBox.getChildren().indexOf(txtCostume.getParent());
-                getCostume.set(indexOfHBox, Integer.parseInt(newText));
+                entry.costume = Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         });
 
         Label lblAuraId=new Label("Aura Id");
-        TextField txtAuraId=new TextField(String.valueOf(getAuraId.getLast()));
+        TextField txtAuraId=new TextField(String.valueOf(entry.auraId));
         txtAuraId.textProperty().addListener((obs,oldText,newText)->{
             if (txtAuraId.getText().contains("-")) {
                 return;
             }
             try {
-                int indexOfHBox = vBox.getChildren().indexOf(txtAuraId.getParent());
-                getAuraId.set(indexOfHBox, Integer.parseInt(newText));
+                entry.auraId = Integer.parseInt(newText);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -316,12 +287,10 @@ public class Aur {
 
         Label lblGlare=new Label("Glare");
         CheckBox glareCheckBox=new CheckBox();
-        glareCheckBox.setSelected(getGlare.getLast().booleanValue());
+        glareCheckBox.setSelected(entry.glare);
         glareCheckBox.selectedProperty().addListener((obs,oldValue,newValue)->{
             try {
-                int indexOfHBox = vBox.getChildren().indexOf(txtAuraId.getParent());
-                
-                getGlare.set(indexOfHBox, newValue);
+                entry.glare = newValue;
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -342,7 +311,7 @@ public class Aur {
             }
             //System.out.println("entry clicked: "+listView.getSelectionModel().getSelectedIndex());
             hBox.getChildren().remove(1);
-            hBox.getChildren().set(1, createVBoxAuraId(listView.getSelectionModel().getSelectedIndex()));
+            hBox.getChildren().set(1, createVBoxAuraId(auraEntries.get(listView.getSelectionModel().getSelectedIndex())));
         });
         listView.setOnMouseClicked(e->{
             if(e.getButton()==MouseButton.SECONDARY){
@@ -355,21 +324,11 @@ public class Aur {
                 contextMenu.getItems().addAll(copy,paste,delete,append,insert);
                 listView.setContextMenu(contextMenu);
                 contextMenu.setOnAction(event->{
-                    if(event.getTarget()==copy){
-                        Copy();
-                    }
-                    if(event.getTarget()==paste){
-                        Paste();
-                    }
-                    if(event.getTarget()==delete){
-                       Delete();
-                    }
-                    if(event.getTarget()==append){
-                        Append();
-                    }
-                    if(event.getTarget()==insert){
-                        Insert();
-                    }
+                    if(event.getTarget() == copy) Copy();
+                    if(event.getTarget() == paste) Paste();
+                    if(event.getTarget() == delete) Delete();
+                    if(event.getTarget() == append) Append();
+                    if(event.getTarget() == insert) Insert();
                 });
             }
         });
@@ -382,62 +341,38 @@ public class Aur {
 
     private void entriesKeysListener(){
         listView.setOnKeyPressed(e->{
-            if(e.isControlDown()&&e.getCode()==KeyCode.C){
-                Copy();
-            }
-            if(e.isControlDown()&&e.getCode()==KeyCode.V){
-                Paste();
-            }
-            if(e.getCode()==KeyCode.DELETE){
-                Delete();
-            }
-            if(e.isControlDown()&&e.getCode()==KeyCode.A){
-                Append();
-                
-            }
-            if(e.isControlDown()&&e.getCode()==KeyCode.I){
-                Insert();
-            }
+            if(e.isControlDown() && e.getCode() == KeyCode.C) Copy();
+            if(e.isControlDown() && e.getCode() == KeyCode.V) Paste();
+            if(e.getCode() == KeyCode.DELETE) Delete();
+            if(e.isControlDown() && e.getCode() == KeyCode.A) Append();
+            if(e.isControlDown() && e.getCode() == KeyCode.I) Insert();
         });
     }
 
     private void Copy(){
-        copyI04=getI04.get(listView.getSelectionModel().getSelectedIndex());
-        copyBoostStart=getBoostStart.get(listView.getSelectionModel().getSelectedIndex());
-        copyBoostLoop=getBoostLoop.get(listView.getSelectionModel().getSelectedIndex());
-        copyBoostEnd=getBoostEnd.get(listView.getSelectionModel().getSelectedIndex());
-        copyKiaiCharge=getKiaiCharge.get(listView.getSelectionModel().getSelectedIndex());
-        copyKiryokuMax=getKiryokuMax.get(listView.getSelectionModel().getSelectedIndex());
-        copyHenshinStart=getHenshinStart.get(listView.getSelectionModel().getSelectedIndex());
-        copyHenshinEnd=getHenshinEnd.get(listView.getSelectionModel().getSelectedIndex());
+        AurAuraEntry selected = auraEntries.get(listView.getSelectionModel().getSelectedIndex());
+        copyContainer = new AurAuraEntry(selected.i04, selected.boostStart, selected.boostLoop, selected.boostEnd, selected.kiaiCharge, selected.kiryokuMax, selected.henshinStart, selected.henshinEnd);
     }
 
     private void Paste(){
-        getI04.set(listView.getSelectionModel().getSelectedIndex(), copyI04);
-        getBoostStart.set(listView.getSelectionModel().getSelectedIndex(), copyBoostStart);
-        getBoostLoop.set(listView.getSelectionModel().getSelectedIndex(), copyBoostLoop);
-        getBoostEnd.set(listView.getSelectionModel().getSelectedIndex(), copyBoostEnd);
-        getKiaiCharge.set(listView.getSelectionModel().getSelectedIndex(), copyKiaiCharge);
-        getKiryokuMax.set(listView.getSelectionModel().getSelectedIndex(), copyKiryokuMax);
-        getHenshinStart.set(listView.getSelectionModel().getSelectedIndex(), copyHenshinStart);
-        getHenshinEnd.set(listView.getSelectionModel().getSelectedIndex(), copyHenshinEnd);
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).i04 = copyContainer.i04;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).boostStart = copyContainer.boostStart;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).boostLoop = copyContainer.boostLoop;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).boostEnd = copyContainer.boostEnd;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).kiaiCharge = copyContainer.kiaiCharge;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).kiryokuMax = copyContainer.kiryokuMax;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).henshinStart = copyContainer.henshinStart;
+        auraEntries.get(listView.getSelectionModel().getSelectedIndex()).henshinEnd = copyContainer.henshinEnd;
         hBox.getChildren().remove(1);
-        hBox.getChildren().set(1, createVBoxAuraId(listView.getSelectionModel().getSelectedIndex()));
+        hBox.getChildren().set(1, createVBoxAuraId(auraEntries.get(listView.getSelectionModel().getSelectedIndex())));
     }
 
     private void Delete(){
         if(listView.getSelectionModel().getSelectedIndex() == 0) return;
-        getI04.remove(listView.getSelectionModel().getSelectedIndex());
-        getBoostStart.remove(listView.getSelectionModel().getSelectedIndex());
-        getBoostLoop.remove(listView.getSelectionModel().getSelectedIndex());
-        getBoostEnd.remove(listView.getSelectionModel().getSelectedIndex());
-        getKiaiCharge.remove(listView.getSelectionModel().getSelectedIndex());
-        getKiryokuMax.remove(listView.getSelectionModel().getSelectedIndex());
-        getHenshinStart.remove(listView.getSelectionModel().getSelectedIndex());
-        getHenshinEnd.remove(listView.getSelectionModel().getSelectedIndex());
+        auraEntries.remove(listView.getSelectionModel().getSelectedIndex());
         allEntries.remove(listView.getSelectionModel().getSelectedIndex());
         listView.getItems().remove(listView.getSelectionModel().getSelectedIndex());
-        
+
         for(int i=0;i<listView.getItems().size();i++){
             allEntries.set(i,new String("Aura Id: "+i));
             listView.getItems().set(i,allEntries.get(i));
@@ -445,39 +380,18 @@ public class Aur {
     }
 
     private void Append(){
-        getI04.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getBoostStart.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getBoostLoop.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getBoostEnd.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getKiaiCharge.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getKiryokuMax.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getHenshinStart.add(listView.getSelectionModel().getSelectedIndex()+1,0);
-        getHenshinEnd.add(listView.getSelectionModel().getSelectedIndex()+1,0);
+        auraEntries.add(listView.getSelectionModel().getSelectedIndex()+1,new AurAuraEntry());
         allEntries.add(new String("Aura Id: "+listView.getItems().size()));
         listView.getItems().add(allEntries.getLast());
     }
     private void Insert(){
         if(listView.getSelectionModel().getSelectedIndex()>0){
-            getI04.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getBoostStart.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getBoostLoop.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getBoostEnd.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getKiaiCharge.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getKiryokuMax.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getHenshinStart.add(listView.getSelectionModel().getSelectedIndex()-1,0);
-            getHenshinEnd.add(listView.getSelectionModel().getSelectedIndex()-1,0);
+            auraEntries.add(listView.getSelectionModel().getSelectedIndex()-1,new AurAuraEntry());
             allEntries.add(new String("Aura Id: "+listView.getItems().size()));
             listView.getItems().add(allEntries.getLast());
         }
         else if(listView.getSelectionModel().getSelectedIndex()==0){
-            getI04.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getBoostStart.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getBoostLoop.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getBoostEnd.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getKiaiCharge.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getKiryokuMax.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getHenshinStart.add(listView.getSelectionModel().getSelectedIndex(),0);
-            getHenshinEnd.add(listView.getSelectionModel().getSelectedIndex(),0);
+            auraEntries.add(listView.getSelectionModel().getSelectedIndex(),new AurAuraEntry());
             allEntries.add(new String("Aura Id: "+listView.getItems().size()));
             listView.getItems().add(allEntries.getLast());
         }
@@ -488,7 +402,7 @@ public class Aur {
             int auraoffset=32;
             int charaOffset=0;
             int effectsOffset=0;
-            int auraEntries;
+            int auraEntriesCount;
             
             ByteBuffer intBuffer=ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
             
@@ -497,10 +411,10 @@ public class Aur {
             intBuffer.clear();
             channel.read(intBuffer);
             intBuffer.flip();
-            auraEntries=intBuffer.getInt();
+            auraEntriesCount=intBuffer.getInt();
 
-            allEntries=new ArrayList<>(auraEntries);
-            for(int i=0;i<auraEntries;i++){
+            allEntries=new ArrayList<>(auraEntriesCount);
+            for(int i=0;i<auraEntriesCount;i++){
                 allEntries.add(new String("Aura Id: "+i));
                 listView.getItems().add(allEntries.get(i));
             }
@@ -519,13 +433,13 @@ public class Aur {
             intBuffer.flip();
             charaOffset=intBuffer.getInt();
 
-            for(int i=0;i<auraEntries;i++){
+            for(int i=0;i<auraEntriesCount;i++){
                 //reading i04
                 channel.position(auraoffset+16*i+4);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getI04.add(intBuffer.getInt());
+                int i04 = intBuffer.getInt();
 
                 //reading effectOffset
                 channel.position(auraoffset+16*i+12);
@@ -539,77 +453,79 @@ public class Aur {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getBoostStart.add(intBuffer.getInt());
+                int boosStart = intBuffer.getInt();
 
                 //reading boostLoop
                 channel.position(effectsOffset+12);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getBoostLoop.add(intBuffer.getInt());
+                int boostLoop = intBuffer.getInt();
 
                 //reading boostEnd
                 channel.position(effectsOffset+20);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getBoostEnd.add(intBuffer.getInt());
+                int boostEnd = intBuffer.getInt();
 
                 //reading kiaiCharge
                 channel.position(effectsOffset+28);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiaiCharge.add(intBuffer.getInt());
+                int kiaiCharge = intBuffer.getInt();
 
                 //reading kiryokuMax
                 channel.position(effectsOffset+36);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiryokuMax.add(intBuffer.getInt());
+                int kiryokuMax = intBuffer.getInt();
 
                 //reading HenshinStart
                 channel.position(effectsOffset+44);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getHenshinStart.add(intBuffer.getInt());
+                int henshinStart = intBuffer.getInt();
 
                 //reading HenshinEnd
                 channel.position(effectsOffset+52);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getHenshinEnd.add(intBuffer.getInt());
+                int henshinEnd = intBuffer.getInt();
                 //System.out.println("looking at: "+(effectsOffset+52));
+
+                auraEntries.add(new AurAuraEntry(i04, boosStart,boostLoop,boostEnd,kiaiCharge,kiryokuMax,henshinStart,henshinEnd));
             }
             for(int i=0;i<characterEntries;i++){
                 channel.position(charaOffset+16*i);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getCharaId.add(intBuffer.getInt());
+                int charaId = intBuffer.getInt();
     
                 channel.position(charaOffset+16*i+4);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getCostume.add(intBuffer.getInt());
+                int costume = intBuffer.getInt();
 
                 channel.position(charaOffset+16*i+8);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getAuraId.add(intBuffer.getInt());
+                int auraId = intBuffer.getInt();
                 
                 channel.position(charaOffset+16*i+12);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getGlare.add(intBuffer.getInt()==1);
-                
-                createVBoxRightCharaId();
+                boolean glare = (intBuffer.getInt() ==  1);
+                charaEntries.add(new AurCharaEntry(charaId,costume,auraId,glare));
+                createVBoxRightCharaId(charaEntries.get(i));
             }
             
         } catch (IOException e) {
@@ -741,6 +657,7 @@ public class Aur {
             channel.write(ByteBuffer.wrap(auraTypes.getBytes(StandardCharsets.ISO_8859_1)));
 
             for(int i=0;i<allEntries.size();i++){
+                AurAuraEntry entry = auraEntries.get(i);
                 //writing aura id initial
                 channel.position(auraOffset+(16*i));
                 intBuffer.clear();
@@ -751,7 +668,7 @@ public class Aur {
                 //writing i04
                 channel.position(auraOffset+(16*i)+4);
                 intBuffer.clear();
-                intBuffer.putInt(getI04.get(i));
+                intBuffer.putInt(entry.i04);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -772,7 +689,7 @@ public class Aur {
                 //writing boostStart
                 channel.position(allEntries.size()*16+32+56*i+4);
                 intBuffer.clear();
-                intBuffer.putInt(getBoostStart.get(i));
+                intBuffer.putInt(entry.boostStart);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -783,7 +700,7 @@ public class Aur {
                 //write boostLoop
                 channel.position(allEntries.size()*16+32+56*i+12);
                 intBuffer.clear();
-                intBuffer.putInt(getBoostLoop.get(i));
+                intBuffer.putInt(entry.boostLoop);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -794,7 +711,7 @@ public class Aur {
                 //write boostEnd
                 channel.position(allEntries.size()*16+32+56*i+20);
                 intBuffer.clear();
-                intBuffer.putInt(getBoostEnd.get(i));
+                intBuffer.putInt(entry.boostEnd);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -805,7 +722,7 @@ public class Aur {
                 //write kiai charge
                 channel.position(allEntries.size()*16+32+56*i+28);
                 intBuffer.clear();
-                intBuffer.putInt(getKiaiCharge.get(i));
+                intBuffer.putInt(entry.kiaiCharge);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -816,7 +733,7 @@ public class Aur {
                 //write kiryoku max
                 channel.position(allEntries.size()*16+32+56*i+36);
                 intBuffer.clear();
-                intBuffer.putInt(getKiryokuMax.get(i));
+                intBuffer.putInt(entry.kiryokuMax);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -827,7 +744,7 @@ public class Aur {
                 //werite henshin start
                 channel.position(allEntries.size()*16+32+56*i+44);
                 intBuffer.clear();
-                intBuffer.putInt(getHenshinStart.get(i));
+                intBuffer.putInt(entry.henshinStart);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -838,33 +755,34 @@ public class Aur {
                 //writing henshin end
                 channel.position(allEntries.size()*16+32+56*i+52);
                 intBuffer.clear();
-                intBuffer.putInt(getHenshinEnd.get(i));
+                intBuffer.putInt(entry.henshinEnd);
                 intBuffer.flip();
                 channel.write(intBuffer);
             }
             for(int i=0;i<characterEntries;i++){
+                AurCharaEntry chara = charaEntries.get(i);
             
                 channel.position(charaOffset+(16*i));
                 intBuffer.clear();
-                intBuffer.putInt(getCharaId.get(i));
+                intBuffer.putInt(chara.charaId);
                 intBuffer.flip();
                 channel.write(intBuffer);
     
                 channel.position(charaOffset+(16*i)+4);
                 intBuffer.clear();
-                intBuffer.putInt(getCostume.get(i));
+                intBuffer.putInt(chara.costume);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(charaOffset+(16*i)+8);
                 intBuffer.clear();
-                intBuffer.putInt(getAuraId.get(i));
+                intBuffer.putInt(chara.auraId);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(charaOffset+(16*i)+12);
                 intBuffer.clear();
-                intBuffer.putInt(getGlare.get(i)?1:0);
+                intBuffer.putInt(chara.glare ? 1 : 0);
                 intBuffer.flip();
                 channel.write(intBuffer);
             }
@@ -872,5 +790,44 @@ public class Aur {
             System.err.println(e);
             Popups.ErrorSave(path.toFile().getName());   
         }
+    }
+}
+class AurAuraEntry {
+    public int i04 = 0;
+    public int boostStart = 0;
+    public int boostLoop = 0;
+    public int boostEnd = 0;
+    public int kiaiCharge = 0;
+    public int kiryokuMax = 0;
+    public int henshinStart = 0;
+    public int henshinEnd = 0;
+
+    public AurAuraEntry() {}
+
+    public AurAuraEntry(int i04, int boostStart, int boostLoop, int boostEnd, int kiaiCharge, int kiryokuMax, int henshinStart, int henshinEnd) {
+        this.i04 = i04;
+        this.boostStart = boostStart;
+        this.boostLoop = boostLoop;
+        this.boostEnd = boostEnd;
+        this.kiaiCharge = kiaiCharge;
+        this.kiryokuMax = kiryokuMax;
+        this.henshinStart = henshinStart;
+        this.henshinEnd = henshinEnd;
+    }
+}
+
+class AurCharaEntry {
+    public int charaId = 0;
+    public int costume = 0;
+    public int auraId = 0;
+    public boolean glare = false;
+
+    public AurCharaEntry() {}
+
+    public AurCharaEntry(int charaId, int costume, int auraId, boolean glare) {
+        this.charaId = charaId;
+        this.costume = costume;
+        this.auraId = auraId;
+        this.glare = glare;
     }
 }
