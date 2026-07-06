@@ -141,38 +141,38 @@ class Agd {
             entries=shortBuffer.getShort();
             
             for(int i=0;i<entries;i++){
+                AgdEntry agdEntry = new AgdEntry();
                 //reading level
                 channel.position(offset*(i+1));
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                int level = intBuffer.getInt();
+                agdEntry.level = intBuffer.getInt();
                 
                 //reading xptonextlevel
                 channel.position(offset*(i+1)+4);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                int xpToNextLevel = intBuffer.getInt();
+                agdEntry.xpToNextLevel = intBuffer.getInt();
                 
                 //reading xptothislevel
                 channel.position(offset*(i+1)+8);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                int xpToThisLevel = intBuffer.getInt();
+                agdEntry.xpToThisLevel = intBuffer.getInt();
 
                 //reading attributepointsgained
                 channel.position(offset*(i+1)+12);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                int attributePointsGained = intBuffer.getInt();
+                agdEntry.attributePointsGained = intBuffer.getInt();
 
-                AgdEntry entry = new AgdEntry(level, xpToNextLevel, xpToThisLevel, attributePointsGained);
-                agdEntries.add(entry);
+                agdEntries.add(agdEntry);
 
-                createVBoxAgdData(entry);
+                createVBoxAgdData(agdEntry);
             }
         } catch (IOException e) {
             System.err.println(e);
