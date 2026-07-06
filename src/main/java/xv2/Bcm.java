@@ -35,93 +35,13 @@ import javafx.scene.control.Tab;
 public class Bcm {
     TreeView<String> treeView=new TreeView<>();
     TreeItem<String> currentEntry=new TreeItem<>();
-
     ArrayList<TreeItem<String>> allEntries;
-    
     TabPane tabPane=new TabPane();
-
     int entryIndex;
 
-    //arraylists for input
-    ArrayList<Long> getDirectionalInputs = new ArrayList<>(); 
-    ArrayList<Long> getButtonInputs = new ArrayList<>(); 
-    ArrayList<Long> getHoldDownConditions= new ArrayList<>();
+   ArrayList <BcmEntry> bcmEntries = new ArrayList<>();
 
-    //arraylists for activator
-    ArrayList<Long> getOpponentSizeConditions = new ArrayList<>();       
-    ArrayList<Integer> getMinimumLoopDuration = new ArrayList<>();       
-    ArrayList<Integer> getMaximumLoopDuration = new ArrayList<>();       
-    ArrayList<Long> getPrimaryActivatorConditions = new ArrayList<>();  
-    ArrayList<Long> getActivatorState = new ArrayList<>();
-
-    //arraylists for BAC
-    ArrayList<Short> getBACEntryPrimary = new ArrayList<>();
-    ArrayList<Short> getBACEntryCharge = new ArrayList<>();
-    ArrayList<Short> getBACEntryUserConnect = new ArrayList<>();
-    ArrayList<Short> getBACEntryVictimConnect = new ArrayList<>();
-    ArrayList<Short> getBACEntryAirborne = new ArrayList<>();
-    ArrayList<Integer> getBACEntryTargetingOverride = new ArrayList<>();
-    ArrayList<Integer> getBACRandomFlags = new ArrayList<>();
-
-    //arraylists for misc
-    ArrayList<Long> getKiCost = new ArrayList<>();                   
-    ArrayList<Long> getReceiverLinkId = new ArrayList<>();            
-    ArrayList<Long> getStaminaCost = new ArrayList<>();               
-    ArrayList<Long> getKiRequired = new ArrayList<>();                 
-    ArrayList<Float> getHealthRequired = new ArrayList<>();            
-    ArrayList<Short> getTransformationStage = new ArrayList<>();       
-    ArrayList<Short> getCusAura = new ArrayList<>();                   
-    ArrayList<Long> getRaceGender = new ArrayList<>();
-    
-    //arraylist for unknown
-    ArrayList<Long> getUnknown0 = new ArrayList<>();
-    ArrayList<Short> getUnknown36 = new ArrayList<>();
-    ArrayList<Long> getUnknown68 = new ArrayList<>();
-    ArrayList<Long> getUnknown72 = new ArrayList<>();
-    ArrayList<Long> getUnknown80 = new ArrayList<>();
-    ArrayList<Long> getUnknown88 = new ArrayList<>();
-    ArrayList<Long> getUnknown104 = new ArrayList<>();
-
-    //copycontainers
-    // Input variables
-    private long copyDirectionalInputs;
-    private long copyButtonInputs;
-    private long copyHoldDownConditions;
-    
-    // Activator variables
-    private long copyOpponentSizeConditions;
-    private int copyMinimumLoopDuration;
-    private int copyMaximumLoopDuration;
-    private long copyPrimaryActivatorConditions;
-    private long copyActivatorState;
-
-    // BAC variables
-    private short copyBACEntryPrimary;
-    private short copyBACEntryCharge;
-    private short copyBACEntryUserConnect;
-    private short copyBACEntryVictimConnect;
-    private short copyBACEntryAirborne;
-    private int copyBACEntryTargetingOverride;
-    private int copyBACRandomFlags;
-
-    // Misc variables
-    private long copyKiCost;
-    private long copyReceiverLinkId;
-    private long copyStaminaCost;
-    private long copyKiRequired;
-    private float copyHealthRequired;
-    private short copyTransformationStage;
-    private short copyCusAura;
-    private long copyRaceGender;
-
-    // Unknown variables
-    private long copyUnknown0;
-    private short copyUnknown36;
-    private long copyUnknown68;
-    private long copyUnknown72;
-    private long copyUnknown80;
-    private long copyUnknown88;
-    private long copyUnknown104;
+    private BcmEntry copyBcmEntryBuffer = null;
   
     public Bcm(){
         entriesActionListener();
@@ -157,7 +77,7 @@ public class Bcm {
         }
     }
     
-    public VBox createInputsVBox(int i){
+    public VBox createInputsVBox(BcmEntry entry){
         VBox inputsVBox=new VBox(20);
         inputsVBox.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
  
@@ -177,41 +97,41 @@ public class Bcm {
         CheckBox leftRD=new CheckBox("Left");
         CheckBox rightRD= new CheckBox("Right");
 
-        forwardsRD.setSelected((getDirectionalInputs.get(i) & 1L) != 0);
-        backwardsRD.setSelected((getDirectionalInputs.get(i) & 2L) != 0);
-        leftRD.setSelected((getDirectionalInputs.get(i) & 4L) != 0);
-        rightRD.setSelected((getDirectionalInputs.get(i) & 8L) != 0);
+        forwardsRD.setSelected((entry.directionalInputs & 1L) != 0);
+        backwardsRD.setSelected((entry.directionalInputs & 2L) != 0);
+        leftRD.setSelected((entry.directionalInputs & 4L) != 0);
+        rightRD.setSelected((entry.directionalInputs & 8L) != 0);
 
         forwardsRD.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|1L);
+                entry.directionalInputs|=1L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~1L);
+                entry.directionalInputs&=~1L;
             }
         });
         backwardsRD.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|2L);
+                entry.directionalInputs|=2L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~2L);
+                entry.directionalInputs&=~2L;
             }
         });
         leftRD.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|4L);
+                entry.directionalInputs|=4L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~4L);
+                entry.directionalInputs&=~4L;
             }
         });
         rightRD.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|8L);
+                entry.directionalInputs|=8L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~8L);
+                entry.directionalInputs&=~8L;
             }
         });
         VBox relativeDirectionBox = new VBox(2,forwardsRD,backwardsRD,leftRD,rightRD);
@@ -228,7 +148,6 @@ public class Bcm {
         relativeDirectionLabel.setTranslateX(10);
         //relative direction
         
-
         //user direction
         Label userDirectionLabel = new Label("User Direction");
         userDirectionLabel.getStyleClass().add("titled-address-label");
@@ -239,50 +158,50 @@ public class Bcm {
         CheckBox rightDI=new CheckBox("Right");
         CheckBox leftDI=new CheckBox("Left");
 
-        inputActivatedOnceDI.setSelected((getDirectionalInputs.get(i) & 16L) != 0);
-        upDI.setSelected((getDirectionalInputs.get(i) & 32L) != 0);
-        downDI.setSelected((getDirectionalInputs.get(i) & 64L) != 0);
-        rightDI.setSelected((getDirectionalInputs.get(i) & 128L) != 0);
-        leftDI.setSelected((getDirectionalInputs.get(i) & 256L) != 0);
+        inputActivatedOnceDI.setSelected((entry.directionalInputs & 16L) != 0);
+        upDI.setSelected((entry.directionalInputs & 32L) != 0);
+        downDI.setSelected((entry.directionalInputs & 64L) != 0);
+        rightDI.setSelected((entry.directionalInputs & 128L) != 0);
+        leftDI.setSelected((entry.directionalInputs & 256L) != 0);
 
         inputActivatedOnceDI.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|16L);
+                entry.directionalInputs|=16L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~16L);
+                entry.directionalInputs&=~16L;
             }
         });
         upDI.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|32L);
+                entry.directionalInputs|=32L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~32L);
+                entry.directionalInputs&=~32L;
             }
         });
         downDI.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|64L);
+                entry.directionalInputs|=64L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~64L);
+                entry.directionalInputs&=~64L;
             }
         });
         rightDI.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|128L);
+                entry.directionalInputs|=128L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~128L);
+                entry.directionalInputs&=~128L;
             }
         });
         leftDI.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|256L);
+                entry.directionalInputs|=256L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~256L);
+                entry.directionalInputs&=~256L;
             }
         });
         VBox userDirectionVBox = new VBox(2,inputActivatedOnceDI,upDI,downDI,rightDI,leftDI);
@@ -299,7 +218,6 @@ public class Bcm {
         userDirectionLabel.setTranslateX(10);
         //user direction
 
-        
         //unknown1
         Label unknownDir1Label = new Label("Unknown 1");
         unknownDir1Label.getStyleClass().add("titled-address-label");
@@ -310,50 +228,50 @@ public class Bcm {
         CheckBox unknown13=new CheckBox("Unknown 13");
         CheckBox unknown14=new CheckBox("Unknown 14");
 
-        unknown10.setSelected((getDirectionalInputs.get(i) & 512L) != 0);
-        unknown11.setSelected((getDirectionalInputs.get(i) & 1024L) != 0);
-        unknown12.setSelected((getDirectionalInputs.get(i) & 2048L) != 0);
-        unknown13.setSelected((getDirectionalInputs.get(i) & 4096L) != 0);
-        unknown14.setSelected((getDirectionalInputs.get(i) & 8192L) != 0);
+        unknown10.setSelected((entry.directionalInputs & 512L) != 0);
+        unknown11.setSelected((entry.directionalInputs & 1024L) != 0);
+        unknown12.setSelected((entry.directionalInputs & 2048L) != 0);
+        unknown13.setSelected((entry.directionalInputs & 4096L) != 0);
+        unknown14.setSelected((entry.directionalInputs & 8192L) != 0);
 
         unknown10.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|512L);
+                entry.directionalInputs|=512L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~512L);
+                entry.directionalInputs&=~512L;
             }
         });
         unknown11.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|1024L);
+                entry.directionalInputs|=1024L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~1024L);
+                entry.directionalInputs&=~1024L;
             }
         });
         unknown12.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|2048L);
+                entry.directionalInputs|=2048L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~2048L);
+                entry.directionalInputs&=~2048L;
             }
         });
         unknown13.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|4096L);
+                entry.directionalInputs|=4096L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~4096L);
+                entry.directionalInputs&=~4096L;
             }
         });
         unknown14.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|8192L);
+                entry.directionalInputs|=8192L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~8192L);
+                entry.directionalInputs&=~8192L;
             }
         });
         VBox unknownGroup1Box = new VBox(2,unknown10,unknown11,unknown12,unknown13,unknown14);
@@ -380,49 +298,49 @@ public class Bcm {
         CheckBox unknown18=new CheckBox("Unknown 18");
         CheckBox unknown19=new CheckBox("Unknown 19");
 
-        unknown15.setSelected((getDirectionalInputs.get(i) & 16384L) != 0);
-        unknown16.setSelected((getDirectionalInputs.get(i) & 32768L) != 0);
-        unknown17.setSelected((getDirectionalInputs.get(i) & 65536L) != 0);
-        unknown18.setSelected((getDirectionalInputs.get(i) & 131072L) != 0);
-        unknown19.setSelected((getDirectionalInputs.get(i) & 262144L) != 0);
+        unknown15.setSelected((entry.directionalInputs & 16384L) != 0);
+        unknown16.setSelected((entry.directionalInputs & 32768L) != 0);
+        unknown17.setSelected((entry.directionalInputs & 65536L) != 0);
+        unknown18.setSelected((entry.directionalInputs & 131072L) != 0);
+        unknown19.setSelected((entry.directionalInputs & 262144L) != 0);
         unknown15.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|16384L);
+                entry.directionalInputs|=16384L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~16384L);
+                entry.directionalInputs&=~16384L;
             }
         });
         unknown16.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|32768L);
+                entry.directionalInputs|=32768L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~32768L);
+                entry.directionalInputs&=~32768L;
             }
         });
         unknown17.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|65536L);
+                entry.directionalInputs|=65536L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~65536L);
+                entry.directionalInputs&=~65536L;
             }
         });
         unknown18.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|131072L);
+                entry.directionalInputs|=131072L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~131072L);
+                entry.directionalInputs&=~131072L;
             }
         });
         unknown19.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|262144L);
+                entry.directionalInputs|=262144L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~262144L);
+                entry.directionalInputs&=~262144L;
             }
         });
         VBox unknownGroup2Box = new VBox(2,unknown15,unknown16,unknown17,unknown18,unknown19);
@@ -449,50 +367,50 @@ public class Bcm {
         CheckBox unknown23=new CheckBox("Unknown 23");
         CheckBox unknown24=new CheckBox("Unknown 24");
 
-        unknown20.setSelected((getDirectionalInputs.get(i) & 524288L) != 0);
-        unknown21.setSelected((getDirectionalInputs.get(i) & 1048576L) != 0);
-        unknown22.setSelected((getDirectionalInputs.get(i) & 2097152L) != 0);
-        unknown23.setSelected((getDirectionalInputs.get(i) & 4194304L) != 0);
-        unknown24.setSelected((getDirectionalInputs.get(i) & 8388608L) != 0);
+        unknown20.setSelected((entry.directionalInputs & 524288L) != 0);
+        unknown21.setSelected((entry.directionalInputs & 1048576L) != 0);
+        unknown22.setSelected((entry.directionalInputs & 2097152L) != 0);
+        unknown23.setSelected((entry.directionalInputs & 4194304L) != 0);
+        unknown24.setSelected((entry.directionalInputs & 8388608L) != 0);
 
         unknown20.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|524288L);
+                entry.directionalInputs|=524288L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~524288L);
+                entry.directionalInputs&=~524288L;
             }
         });
         unknown21.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|1048576L);
+                entry.directionalInputs|=1048576L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~1048576L);
+                entry.directionalInputs&=~1048576L;
             }
         });
         unknown22.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|2097152L);
+                entry.directionalInputs|=2097152L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~2097152L);
+                entry.directionalInputs&=~2097152L;
             }
         });
         unknown23.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|4194304L);
+                entry.directionalInputs|=4194304L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~4194304L);
+                entry.directionalInputs&=~4194304L;
             }
         });
         unknown24.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|8388608L);
+                entry.directionalInputs|=8388608L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~8388608L);
+                entry.directionalInputs&=~8388608L;
             }
         });
         
@@ -520,50 +438,50 @@ public class Bcm {
         CheckBox unknown28=new CheckBox("Unknown 28");
         CheckBox unknown29=new CheckBox("Unknown 29");
 
-        unknown25.setSelected((getDirectionalInputs.get(i) & 16777216L) != 0);
-        unknown26.setSelected((getDirectionalInputs.get(i) & 33554432L) != 0);
-        unknown27.setSelected((getDirectionalInputs.get(i) & 67108864L) != 0);
-        unknown28.setSelected((getDirectionalInputs.get(i) & 134217728L) != 0);
-        unknown29.setSelected((getDirectionalInputs.get(i) & 268435456L) != 0);
+        unknown25.setSelected((entry.directionalInputs & 16777216L) != 0);
+        unknown26.setSelected((entry.directionalInputs & 33554432L) != 0);
+        unknown27.setSelected((entry.directionalInputs & 67108864L) != 0);
+        unknown28.setSelected((entry.directionalInputs & 134217728L) != 0);
+        unknown29.setSelected((entry.directionalInputs & 268435456L) != 0);
 
         unknown25.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|16777216L);
+                entry.directionalInputs|=16777216L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~16777216L);
+                entry.directionalInputs&=~16777216L;
             }
         });
         unknown26.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|33554432L);
+                entry.directionalInputs|=33554432L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~33554432L);
+                entry.directionalInputs&=~33554432L;
             }
         });
         unknown27.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|67108864L);
+                entry.directionalInputs|=67108864L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~67108864L);
+                entry.directionalInputs&=~67108864L;
             }
         });
         unknown28.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|134217728L);
+                entry.directionalInputs|=134217728L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~134217728L);
+                entry.directionalInputs&=~134217728L;
             }
         });
         unknown29.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|268435456L);
+                entry.directionalInputs|=268435456L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~268435456L);
+                entry.directionalInputs&=~268435456L;
             }
         });
         VBox unknownGroup4Box = new VBox(2,unknown25,unknown26,unknown27,unknown28,unknown29);
@@ -588,32 +506,32 @@ public class Bcm {
         CheckBox unknown31=new CheckBox("Unknown 31");
         CheckBox unknown32=new CheckBox("Unknown 32");
 
-        unknown30.setSelected((getDirectionalInputs.get(i) & 536870912L) != 0);
-        unknown31.setSelected((getDirectionalInputs.get(i) & 1073741824L) != 0);
-        unknown32.setSelected((getDirectionalInputs.get(i) & 2147483648L) != 0);
+        unknown30.setSelected((entry.directionalInputs & 536870912L) != 0);
+        unknown31.setSelected((entry.directionalInputs & 1073741824L) != 0);
+        unknown32.setSelected((entry.directionalInputs & 2147483648L) != 0);
 
         unknown30.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|536870912L);
+                entry.directionalInputs|=536870912L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~536870912L);
+                entry.directionalInputs&=~536870912L;
             }
         });
         unknown31.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|1073741824L);
+                entry.directionalInputs|=1073741824L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~1073741824L);
+                entry.directionalInputs&=~1073741824L;
             }
         });
         unknown32.selectedProperty().addListener((obs,oldValue,newValue)->{
             if(newValue){
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)|2147483648L);
+                entry.directionalInputs|=2147483648L;
             }
             else{
-                getDirectionalInputs.set(i,getDirectionalInputs.get(i)&~2147483648L);
+                entry.directionalInputs&=~2147483648L;
             }
         });
         VBox unknownGroup5Box = new VBox(2,unknown30,unknown31,unknown32);
@@ -653,27 +571,43 @@ public class Bcm {
         CheckBox blast = new CheckBox("Blast"); 
         CheckBox jump = new CheckBox("Jump");
 
-        light.setSelected((getButtonInputs.get(i) & 1L) != 0);
-        heavy.setSelected((getButtonInputs.get(i) & 2L) != 0);
-        blast.setSelected((getButtonInputs.get(i) & 4L) != 0);
-        jump.setSelected((getButtonInputs.get(i) & 8L) != 0);
+        light.setSelected((entry.buttonInputs & 1L) != 0);
+        heavy.setSelected((entry.buttonInputs & 2L) != 0);
+        blast.setSelected((entry.buttonInputs& 4L) != 0);
+        jump.setSelected((entry.buttonInputs & 8L) != 0);
 
         // 0x1 Group
         light.selectedProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue) { getButtonInputs.set(i, getButtonInputs.get(i) | 1L); }
-            else { getButtonInputs.set(i, getButtonInputs.get(i) & ~1L); }
+            if (newValue) { 
+                entry.buttonInputs |= 1L; 
+            }
+            else { 
+                entry.buttonInputs &= ~1L; 
+            }
         });
         heavy.selectedProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue) { getButtonInputs.set(i, getButtonInputs.get(i) | 2L); }
-            else { getButtonInputs.set(i, getButtonInputs.get(i) & ~2L); }
+            if (newValue) { 
+                entry.buttonInputs |= 2L; 
+            }
+            else { 
+                entry.buttonInputs &= ~2L; 
+            }
         });
         blast.selectedProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue) { getButtonInputs.set(i, getButtonInputs.get(i) | 4L); }
-            else { getButtonInputs.set(i, getButtonInputs.get(i) & ~4L); }
+            if (newValue) { 
+                entry.buttonInputs |= 4L; 
+            }
+            else { 
+                entry.buttonInputs &= ~4L; 
+            }
         });
         jump.selectedProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue) { getButtonInputs.set(i, getButtonInputs.get(i) | 8L); }
-            else { getButtonInputs.set(i, getButtonInputs.get(i) & ~8L); }
+            if (newValue) { 
+                entry.buttonInputs |= 8L; 
+            }
+            else { 
+                entry.buttonInputs &= ~8L; 
+            }
         });
         VBox hexDigit0Box = new VBox(2, light, heavy, blast, jump);
 
@@ -699,37 +633,37 @@ public class Bcm {
         CheckBox guard = new CheckBox("Guard");
         CheckBox unknown8 = new CheckBox("Unknown 8");
 
-        skillMenu.setSelected((getButtonInputs.get(i) & 16L) != 0);
-        boost.setSelected((getButtonInputs.get(i) & 32L) != 0);
-        guard.setSelected((getButtonInputs.get(i) & 64L) != 0);
-        unknown8.setSelected((getButtonInputs.get(i) & 128L) != 0);
+        skillMenu.setSelected((entry.buttonInputs & 16L) != 0);
+        boost.setSelected((entry.buttonInputs & 32L) != 0);
+        guard.setSelected((entry.buttonInputs & 64L) != 0);
+        unknown8.setSelected((entry.buttonInputs & 128L) != 0);
 
         skillMenu.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 16L);
+                entry.buttonInputs |= 16L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~16L);
+                entry.buttonInputs &= ~16L;
             }
         });
         boost.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 32L);
+                entry.buttonInputs |= 32L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~32L);
+                entry.buttonInputs &= ~32L;
             }
         });
         guard.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 64L);
+                entry.buttonInputs |= 64L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~64L);
+                entry.buttonInputs &= ~64L;
             }
         });
         unknown8.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 128L);
+                entry.buttonInputs |= 128L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~128L);
+                entry.buttonInputs &= ~128L;
             }
         });
         VBox hexDigit1Box = new VBox(2, skillMenu, boost, guard, unknown8);
@@ -756,37 +690,37 @@ public class Bcm {
         CheckBox superSkill3 = new CheckBox("Super Skill 3");
         CheckBox superSkill4 = new CheckBox("Super Skill 4");
 
-        superSkill1.setSelected((getButtonInputs.get(i) & 256L) != 0);
-        superSkill2.setSelected((getButtonInputs.get(i) & 512L) != 0);
-        superSkill3.setSelected((getButtonInputs.get(i) & 1024L) != 0);
-        superSkill4.setSelected((getButtonInputs.get(i) & 2048L) != 0);
+        superSkill1.setSelected((entry.buttonInputs & 256L) != 0);
+        superSkill2.setSelected((entry.buttonInputs & 512L) != 0);
+        superSkill3.setSelected((entry.buttonInputs & 1024L) != 0);
+        superSkill4.setSelected((entry.buttonInputs & 2048L) != 0);
 
         superSkill1.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 256L);
+                entry.buttonInputs |= 256L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~256L);
+                entry.buttonInputs &= ~256L;
             }
         });
         superSkill2.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 512L);
+                entry.buttonInputs |= 512L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~512L);
+                entry.buttonInputs &= ~512L;
             }
         });
         superSkill3.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 1024L);
+                entry.buttonInputs |= 1024L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~1024L);
+                entry.buttonInputs &= ~1024L;
             }
         });
         superSkill4.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 2048L);
+                entry.buttonInputs |= 2048L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~2048L);
+                entry.buttonInputs &= ~2048L;
             }
         });
         VBox hexDigit2Box = new VBox(2, superSkill1, superSkill2, superSkill3, superSkill4);
@@ -813,37 +747,37 @@ public class Bcm {
         CheckBox awokenSkill = new CheckBox("Awoken Skill");
         CheckBox evasiveSkill = new CheckBox("Evasive Skill");
 
-        ultimateSkill1.setSelected((getButtonInputs.get(i) & 4096L) != 0);
-        ultimateSkill2.setSelected((getButtonInputs.get(i) & 8192L) != 0);
-        awokenSkill.setSelected((getButtonInputs.get(i) & 16384L) != 0);
-        evasiveSkill.setSelected((getButtonInputs.get(i) & 32768L) != 0);
+        ultimateSkill1.setSelected((entry.buttonInputs & 4096L) != 0);
+        ultimateSkill2.setSelected((entry.buttonInputs & 8192L) != 0);
+        awokenSkill.setSelected((entry.buttonInputs & 16384L) != 0);
+        evasiveSkill.setSelected((entry.buttonInputs & 32768L) != 0);
 
         ultimateSkill1.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 4096L);
+                entry.buttonInputs |= 4096L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~4096L);
+                entry.buttonInputs &= ~4096L;
             }
         });
         ultimateSkill2.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 8192L);
+                entry.buttonInputs |= 8192L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~8192L);
+                entry.buttonInputs &= ~8192L;
             }
         });
         awokenSkill.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 16384L);
+                entry.buttonInputs |= 16384L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~16384L);
+                entry.buttonInputs &= ~16384L;
             }
         });
         evasiveSkill.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 32768L);
+                entry.buttonInputs |= 32768L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~32768L);
+                entry.buttonInputs &= ~32768L;
             }
         });
         VBox hexDigit3Box = new VBox(2, ultimateSkill1, ultimateSkill2, awokenSkill, evasiveSkill);
@@ -870,37 +804,37 @@ public class Bcm {
         CheckBox ultimateMenuPlusSkillInput = new CheckBox("Ultimate Menu+Skill Input");
         CheckBox unknown20Button = new CheckBox("Unknown 20");
 
-        skillInput.setSelected((getButtonInputs.get(i) & 65536L) != 0);
-        superMenuPlusSkillInput.setSelected((getButtonInputs.get(i) & 131072L) != 0);
-        ultimateMenuPlusSkillInput.setSelected((getButtonInputs.get(i) & 262144L) != 0);
-        unknown20Button.setSelected((getButtonInputs.get(i) & 524288L) != 0);
+        skillInput.setSelected((entry.buttonInputs & 65536L) != 0);
+        superMenuPlusSkillInput.setSelected((entry.buttonInputs & 131072L) != 0);
+        ultimateMenuPlusSkillInput.setSelected((entry.buttonInputs & 262144L) != 0);
+        unknown20Button.setSelected((entry.buttonInputs & 524288L) != 0);
 
         skillInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 65536L);
+                entry.buttonInputs |= 65536L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~65536L);
+                entry.buttonInputs &= ~65536L;
             }
         });
         superMenuPlusSkillInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 131072L);
+                entry.buttonInputs |= 131072L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~131072L);
+                entry.buttonInputs &= ~131072L;
             }
         });
         ultimateMenuPlusSkillInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 262144L);
+                entry.buttonInputs |= 262144L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~262144L);
+                entry.buttonInputs &= ~262144L;
             }
         });
         unknown20Button.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 524288L);
+                entry.buttonInputs |= 524288L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~524288L);
+                entry.buttonInputs &= ~524288L;
             }
         });
         VBox hexDigit4Box = new VBox(2, skillInput, superMenuPlusSkillInput, ultimateMenuPlusSkillInput, unknown20Button);
@@ -927,37 +861,37 @@ public class Bcm {
         CheckBox dragonRadar=new CheckBox("Dragon Radar");
         CheckBox jump2=new CheckBox("Jump 2");
 
-        lockedON.setSelected((getButtonInputs.get(i) & 1048576L) != 0);
-        descend.setSelected((getButtonInputs.get(i) & 2097152L) != 0);
-        dragonRadar.setSelected((getButtonInputs.get(i) & 4194304L) != 0);
-        jump2.setSelected((getButtonInputs.get(i) & 8388608L) != 0);
+        lockedON.setSelected((entry.buttonInputs & 1048576L) != 0);
+        descend.setSelected((entry.buttonInputs & 2097152L) != 0);
+        dragonRadar.setSelected((entry.buttonInputs & 4194304L) != 0);
+        jump2.setSelected((entry.buttonInputs & 8388608L) != 0);
 
         lockedON.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 1048576L);
+                entry.buttonInputs |= 1048576L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~1048576L);
+                entry.buttonInputs &= ~1048576L;
             }
         });
         descend.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 2097152L);
+                entry.buttonInputs |= 2097152L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~2097152L);
+                entry.buttonInputs &= ~2097152L;
             }
         });
         dragonRadar.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 4194304L);
+                entry.buttonInputs |= 4194304L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~4194304L);
+                entry.buttonInputs &= ~4194304L;
             }
         });
         jump2.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 8388608L);
+                entry.buttonInputs |= 8388608L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~8388608L);
+                entry.buttonInputs &= ~8388608L;
             }
         });
         VBox hexDigit5Box = new VBox(2, lockedON,descend,dragonRadar,jump2);
@@ -983,37 +917,37 @@ public class Bcm {
         CheckBox unknown27ButtonInput=new CheckBox("Unknown 27");
         CheckBox unknown28ButtonInput=new CheckBox("Unknown 28");
 
-        ultimateMenu.setSelected((getButtonInputs.get(i) & 16777216L) != 0);
-        unknown26ButtonInput.setSelected((getButtonInputs.get(i) & 33554432L) != 0);
-        unknown27ButtonInput.setSelected((getButtonInputs.get(i) & 67108864L) != 0);
-        unknown28ButtonInput.setSelected((getButtonInputs.get(i) & 134217728L) != 0);
+        ultimateMenu.setSelected((entry.buttonInputs & 16777216L) != 0);
+        unknown26ButtonInput.setSelected((entry.buttonInputs & 33554432L) != 0);
+        unknown27ButtonInput.setSelected((entry.buttonInputs & 67108864L) != 0);
+        unknown28ButtonInput.setSelected((entry.buttonInputs & 134217728L) != 0);
 
         ultimateMenu.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 16777216L);
+                entry.buttonInputs |= 16777216L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~16777216L);
+                entry.buttonInputs &= ~16777216L;
             }
         });
         unknown26ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 33554432L);
+                entry.buttonInputs |= 33554432L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~33554432L);
+                entry.buttonInputs &= ~33554432L;
             }
         });
         unknown27ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 67108864L);
+                entry.buttonInputs |= 67108864L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~67108864L);
+                entry.buttonInputs &= ~67108864L;
             }
         });
         unknown28ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 134217728L);
+                entry.buttonInputs |= 134217728L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~134217728L);
+                entry.buttonInputs &= ~134217728L;
             }
         });
 
@@ -1041,37 +975,37 @@ public class Bcm {
         CheckBox unknown31ButtonInput=new CheckBox("Unknown 31");
         CheckBox unknown32ButtonInput=new CheckBox("Unknown 32");
 
-        ultimateMenu2.setSelected((getButtonInputs.get(i) & 268435456L) != 0);
-        unknown30ButtonInput.setSelected((getButtonInputs.get(i) & 536870912L) != 0);
-        unknown31ButtonInput.setSelected((getButtonInputs.get(i) & 1073741824L) != 0);
-        unknown32ButtonInput.setSelected((getButtonInputs.get(i) & 2147483648L) != 0);
+        ultimateMenu2.setSelected((entry.buttonInputs & 268435456L) != 0);
+        unknown30ButtonInput.setSelected((entry.buttonInputs & 536870912L) != 0);
+        unknown31ButtonInput.setSelected((entry.buttonInputs & 1073741824L) != 0);
+        unknown32ButtonInput.setSelected((entry.buttonInputs & 2147483648L) != 0);
 
         ultimateMenu2.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 268435456L);
+                entry.buttonInputs |= 268435456L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~268435456L);
+                entry.buttonInputs &= ~268435456L;
             }
         });
         unknown30ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 536870912L);
+                entry.buttonInputs |= 536870912L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~536870912L);
+                entry.buttonInputs &= ~536870912L;
             }
         });
         unknown31ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 1073741824L);
+                entry.buttonInputs |= 1073741824L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~1073741824L);
+                entry.buttonInputs &= ~1073741824L;
             }
         });
         unknown32ButtonInput.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getButtonInputs.set(i, getButtonInputs.get(i) | 2147483648L);
+                entry.buttonInputs |= 2147483648L;
             } else {
-                getButtonInputs.set(i, getButtonInputs.get(i) & ~2147483648L);
+                entry.buttonInputs &= ~2147483648L;
             }
         });
 
@@ -1115,10 +1049,10 @@ public class Bcm {
         CheckBox unknown4HDC = new CheckBox("Unknown 4");
 
         continueUntilReleased.setSelected(true); 
-        delayUntilReleased.setSelected((getHoldDownConditions.get(i) & 1L) != 0);       
-        unknown2HDC.setSelected((getHoldDownConditions.get(i) & 2L) != 0);              
-        stopSkillFromActivating.setSelected((getHoldDownConditions.get(i) & 4L) != 0);  
-        unknown4HDC.setSelected((getHoldDownConditions.get(i) & 8L) != 0);
+        delayUntilReleased.setSelected((entry.holdDownConditions & 1L) != 0);       
+        unknown2HDC.setSelected((entry.holdDownConditions & 2L) != 0);              
+        stopSkillFromActivating.setSelected((entry.holdDownConditions& 4L) != 0);  
+        unknown4HDC.setSelected((entry.holdDownConditions & 8L) != 0);
 
         if(delayUntilReleased.isSelected()||unknown2HDC.isSelected()||stopSkillFromActivating.isSelected()||unknown4HDC.isSelected()){
             continueUntilReleased.setSelected(false);
@@ -1128,7 +1062,6 @@ public class Bcm {
         continueUntilReleased.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if(delayUntilReleased.isSelected()||unknown2HDC.isSelected()||stopSkillFromActivating.isSelected()||unknown4HDC.isSelected()){
                 continueUntilReleased.setSelected(false);
-
             }
             else{
                 continueUntilReleased.setSelected(true);
@@ -1137,31 +1070,30 @@ public class Bcm {
         });
         delayUntilReleased.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 1L);
+                entry.holdDownConditions |= 1L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~1L);
+                entry.holdDownConditions &= ~1L;
             }
         });
         unknown2HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 2L);
+                entry.holdDownConditions |= 2L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~2L);
+                entry.holdDownConditions &= ~2L;
             }
         });
-        
         stopSkillFromActivating.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 4L);
+                entry.holdDownConditions |= 4L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~4L);
+                entry.holdDownConditions &= ~4L;
             }
         });
         unknown4HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 8L);
+                entry.holdDownConditions |= 8L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~8L);
+                entry.holdDownConditions &= ~8L;
             }
         });
 
@@ -1197,40 +1129,37 @@ public class Bcm {
         CheckBox unknown7HDC = new CheckBox("Unknown 7");
         CheckBox unknown8HDC = new CheckBox("Unknown 8");
 
-        unknown5HDC.setSelected((getHoldDownConditions.get(i) & 16L) != 0);   
-        unknown6HDC.setSelected((getHoldDownConditions.get(i) & 32L) != 0);      
-        unknown7HDC.setSelected((getHoldDownConditions.get(i) & 64L) != 0);       
-        unknown8HDC.setSelected((getHoldDownConditions.get(i) & 128L) != 0);     
+        unknown5HDC.setSelected((entry.holdDownConditions & 16L) != 0);   
+        unknown6HDC.setSelected((entry.holdDownConditions & 32L) != 0);      
+        unknown7HDC.setSelected((entry.holdDownConditions & 64L) != 0);       
+        unknown8HDC.setSelected((entry.holdDownConditions & 128L) != 0);     
 
         unknown5HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 16L);
+                entry.holdDownConditions |= 16L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~16L);
+                entry.holdDownConditions &= ~16L;
             }
         });
-
         unknown6HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 32L);
+                entry.holdDownConditions |= 32L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~32L);
+                entry.holdDownConditions &= ~32L;
             }
         });
-
         unknown7HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 64L);
+                entry.holdDownConditions |= 64L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~64L);
+                entry.holdDownConditions &= ~64L;
             }
         });
-
         unknown8HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 128L);
+                entry.holdDownConditions |= 128L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~128L);
+                entry.holdDownConditions &= ~128L;
             }
         });
 
@@ -1258,38 +1187,38 @@ public class Bcm {
         CheckBox unknown11HDC = new CheckBox("Unknown 11");
         CheckBox unknown12HDC = new CheckBox("Unknown 12");
 
-        unknown9HDC.setSelected((getHoldDownConditions.get(i) & 256L) != 0);      // Bit 8  (256)
-        unknown10HDC.setSelected((getHoldDownConditions.get(i) & 512L) != 0);     // Bit 9  (512)
-        unknown11HDC.setSelected((getHoldDownConditions.get(i) & 1024L) != 0);    // Bit 10 (1024)
-        unknown12HDC.setSelected((getHoldDownConditions.get(i) & 2048L) != 0);    
+        unknown9HDC.setSelected((entry.holdDownConditions & 256L) != 0);   
+        unknown10HDC.setSelected((entry.holdDownConditions & 512L) != 0);     
+        unknown11HDC.setSelected((entry.holdDownConditions & 1024L) != 0);    
+        unknown12HDC.setSelected((entry.holdDownConditions & 2048L) != 0);    
    
 
         unknown9HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 256L);
+                entry.holdDownConditions |= 256L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~256L);
+                entry.holdDownConditions &= ~256L;
             }
         });
         unknown10HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 512L);
+                entry.holdDownConditions |= 512L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~512L);
+                entry.holdDownConditions &= ~512L;
             }
         });
         unknown11HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 1024L);
+                entry.holdDownConditions |= 1024L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~1024L);
+                entry.holdDownConditions &= ~1024L;
             }
         });
         unknown12HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 2048L);
+                entry.holdDownConditions |= 2048L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~2048L);
+                entry.holdDownConditions &= ~2048L;
             }
         });
 
@@ -1317,37 +1246,37 @@ public class Bcm {
         CheckBox unknown15HDC = new CheckBox("Unknown 15");
         CheckBox unknown16HDC = new CheckBox("Unknown 16");
 
-        unknown13HDC.setSelected((getHoldDownConditions.get(i) & 4096L) != 0);    
-        unknown14HDC.setSelected((getHoldDownConditions.get(i) & 8192L) != 0);   
-        unknown15HDC.setSelected((getHoldDownConditions.get(i) & 16384L) != 0);   
-        unknown16HDC.setSelected((getHoldDownConditions.get(i) & 32768L) != 0);   
+        unknown13HDC.setSelected((entry.holdDownConditions & 4096L) != 0);    
+        unknown14HDC.setSelected((entry.holdDownConditions & 8192L) != 0);   
+        unknown15HDC.setSelected((entry.holdDownConditions & 16384L) != 0);   
+        unknown16HDC.setSelected((entry.holdDownConditions & 32768L) != 0);   
 
         unknown13HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 4096L);
+                entry.holdDownConditions |= 4096L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~4096L);
+                entry.holdDownConditions &= ~4096L;
             }
         });
         unknown14HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 8192L);
+                entry.holdDownConditions |= 8192L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~8192L);
+                entry.holdDownConditions &= ~8192L;
             }
         });
         unknown15HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 16384L);
+                entry.holdDownConditions |= 16384L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~16384L);
+                entry.holdDownConditions &= ~16384L;
             }
         });
         unknown16HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 32768L);
+                entry.holdDownConditions |= 32768L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~32768L);
+                entry.holdDownConditions &= ~32768L;
             }
         });
         VBox option4Box = new VBox(2,unknown13HDC,unknown14HDC,unknown15HDC,unknown16HDC);
@@ -1376,10 +1305,10 @@ public class Bcm {
         CheckBox unknown20HDC = new CheckBox("Unknown 20");
         automatic.setSelected(true);
 
-        manual.setSelected((getHoldDownConditions.get(i) & 65536L) != 0);   
-        unknown18HDC.setSelected((getHoldDownConditions.get(i) & 131072L) != 0);  
-        unknown19HDC.setSelected((getHoldDownConditions.get(i) & 262144L) != 0);  
-        unknown20HDC.setSelected((getHoldDownConditions.get(i) & 524288L) != 0);  
+        manual.setSelected((entry.holdDownConditions & 65536L) != 0);   
+        unknown18HDC.setSelected((entry.holdDownConditions & 131072L) != 0);  
+        unknown19HDC.setSelected((entry.holdDownConditions & 262144L) != 0);  
+        unknown20HDC.setSelected((entry.holdDownConditions & 524288L) != 0);  
 
         if(manual.isSelected()||unknown18HDC.isSelected()||unknown19HDC.isSelected()||unknown20HDC.isSelected()){
             automatic.setSelected(false);
@@ -1397,30 +1326,30 @@ public class Bcm {
 
         manual.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 65536L);
+                entry.holdDownConditions |= 65536L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~65536L);
+                entry.holdDownConditions &= ~65536L;
             }
         });
         unknown18HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 131072L);
+                entry.holdDownConditions |= 131072L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~131072L);
+                entry.holdDownConditions &= ~131072L;
             }
         });
         unknown19HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 262144L);
+                entry.holdDownConditions |= 262144L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~262144L);
+                entry.holdDownConditions &= ~262144L;
             }
         });
         unknown20HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 524288L);
+                entry.holdDownConditions |= 524288L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~524288L);
+                entry.holdDownConditions &= ~524288L;
             }
         });
 
@@ -1460,37 +1389,37 @@ public class Bcm {
         CheckBox unknown23HDC = new CheckBox("Unknown 23");
         CheckBox unknown24HDC = new CheckBox("Unknown 24");
 
-        unknown21HDC.setSelected((getHoldDownConditions.get(i) & 1048576L) != 0); 
-        unknown22HDC.setSelected((getHoldDownConditions.get(i) & 2097152L) != 0); 
-        unknown23HDC.setSelected((getHoldDownConditions.get(i) & 4194304L) != 0); 
-        unknown24HDC.setSelected((getHoldDownConditions.get(i) & 8388608L) != 0); 
+        unknown21HDC.setSelected((entry.holdDownConditions & 1048576L) != 0); 
+        unknown22HDC.setSelected((entry.holdDownConditions & 2097152L) != 0); 
+        unknown23HDC.setSelected((entry.holdDownConditions & 4194304L) != 0); 
+        unknown24HDC.setSelected((entry.holdDownConditions & 8388608L) != 0); 
 
         unknown21HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 1048576L);
+                entry.holdDownConditions |= 1048576L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~1048576L);
+                entry.holdDownConditions &= ~1048576L;
             }
         });
         unknown22HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 2097152L);
+                entry.holdDownConditions |= 2097152L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~2097152L);
+                entry.holdDownConditions &= ~2097152L;
             }
         });
         unknown23HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 4194304L);
+                entry.holdDownConditions |= 4194304L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~4194304L);
+                entry.holdDownConditions &= ~4194304L;
             }
         });
         unknown24HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 8388608L);
+                entry.holdDownConditions |= 8388608L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~8388608L);
+                entry.holdDownConditions &= ~8388608L;
             }
         });
 
@@ -1520,37 +1449,37 @@ public class Bcm {
         CheckBox unknown27HDC = new CheckBox("Unknown 27");
         CheckBox unknown28HDC = new CheckBox("Unknown 28");
 
-        unknown25HDC.setSelected((getHoldDownConditions.get(i) & 16777216L) != 0);
-        unknown26HDC.setSelected((getHoldDownConditions.get(i) & 33554432L) != 0);
-        unknown27HDC.setSelected((getHoldDownConditions.get(i) & 67108864L) != 0);
-        unknown28HDC.setSelected((getHoldDownConditions.get(i) & 134217728L) != 0);
+        unknown25HDC.setSelected((entry.holdDownConditions & 16777216L) != 0);
+        unknown26HDC.setSelected((entry.holdDownConditions & 33554432L) != 0);
+        unknown27HDC.setSelected((entry.holdDownConditions & 67108864L) != 0);
+        unknown28HDC.setSelected((entry.holdDownConditions & 134217728L) != 0);
 
         unknown25HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 16777216L);
+                entry.holdDownConditions |= 16777216L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~16777216L);
+                entry.holdDownConditions &= ~16777216L;
             }
         });
         unknown26HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 33554432L);
+                entry.holdDownConditions |= 33554432L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~33554432L);
+                entry.holdDownConditions &= ~33554432L;
             }
         });
         unknown27HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 67108864L);
+                entry.holdDownConditions |= 67108864L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~67108864L);
+                entry.holdDownConditions &= ~67108864L;
             }
         });
         unknown28HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 134217728L);
+                entry.holdDownConditions |= 134217728L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~134217728L);
+                entry.holdDownConditions &= ~134217728L;
             }
         });
 
@@ -1578,37 +1507,37 @@ public class Bcm {
         CheckBox unknown31HDC = new CheckBox("Unknown 31");
         CheckBox unknown32HDC = new CheckBox("Unknown 32");
 
-        unknown29HDC.setSelected((getHoldDownConditions.get(i) & 268435456L) != 0);
-        unknown30HDC.setSelected((getHoldDownConditions.get(i) & 536870912L) != 0);
-        unknown31HDC.setSelected((getHoldDownConditions.get(i) & 1073741824L) != 0);
-        unknown32HDC.setSelected((getHoldDownConditions.get(i) & 2147483648L) != 0);
+        unknown29HDC.setSelected((entry.holdDownConditions & 268435456L) != 0);
+        unknown30HDC.setSelected((entry.holdDownConditions & 536870912L) != 0);
+        unknown31HDC.setSelected((entry.holdDownConditions & 1073741824L) != 0);
+        unknown32HDC.setSelected((entry.holdDownConditions & 2147483648L) != 0);
 
         unknown29HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 268435456L);
+                entry.holdDownConditions |= 268435456L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~268435456L);
+                entry.holdDownConditions &= ~268435456L;
             }
         });
         unknown30HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 536870912L);
+                entry.holdDownConditions |= 536870912L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~536870912L);
+                entry.holdDownConditions &= ~536870912L;
             }
         });
         unknown31HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 1073741824L);
+                entry.holdDownConditions |= 1073741824L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~1073741824L);
+                entry.holdDownConditions &= ~1073741824L;
             }
         });
         unknown32HDC.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) | 2147483648L);
+                entry.holdDownConditions |= 2147483648L;
             } else {
-                getHoldDownConditions.set(i, getHoldDownConditions.get(i) & ~2147483648L);
+                entry.holdDownConditions &= ~2147483648L;
             }
         });
 
@@ -1635,7 +1564,8 @@ public class Bcm {
    
         return inputsVBox;
     }
-    private ScrollPane createActivatorScrollPane(int i){
+
+    private ScrollPane createActivatorScrollPane(BcmEntry entry){
         Tab activator=new Tab("Activator");
         activator.setClosable(false);
 
@@ -1661,37 +1591,37 @@ public class Bcm {
         CheckBox unknown3OpponentSizeConditions = new CheckBox("Unknown 3"); 
         CheckBox unknown4OpponentSizeConditions = new CheckBox("Unknown 4");
 
-        unknown1OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 1L) != 0);          
-        unknown2OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 2L) != 0);          
-        unknown3OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 4L) != 0);         
-        unknown4OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 8L) != 0);     
+        unknown1OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 1L) != 0);          
+        unknown2OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 2L) != 0);          
+        unknown3OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 4L) != 0);         
+        unknown4OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 8L) != 0);     
         
         unknown1OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 1L);
+                entry.opponentSizeConditions |= 1L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~1L);
+                entry.opponentSizeConditions &= ~1L;
             }
         });
         unknown2OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 2L);
+                entry.opponentSizeConditions |= 2L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~2L);
+                entry.opponentSizeConditions &= ~2L;
             }
         });
         unknown3OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 4L);
+                entry.opponentSizeConditions |= 4L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~4L);
+                entry.opponentSizeConditions &= ~4L;
             }
         });
         unknown4OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 8L);
+                entry.opponentSizeConditions |= 8L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~8L);
+                entry.opponentSizeConditions &= ~8L;
             }
         });
 
@@ -1719,37 +1649,37 @@ public class Bcm {
         CheckBox unknown7OpponentSizeConditions = new CheckBox("Unknown 7"); 
         CheckBox unknown8OpponentSizeConditions = new CheckBox("Unknown 8");
 
-        unknown5OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 16L) != 0);       
-        unknown6OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 32L) != 0);         
-        unknown7OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 64L) != 0);         
-        unknown8OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 128L) != 0);        
+        unknown5OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 16L) != 0);       
+        unknown6OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 32L) != 0);         
+        unknown7OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 64L) != 0);         
+        unknown8OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 128L) != 0);        
 
         unknown5OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 16L);
+                entry.opponentSizeConditions |= 16L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~16L);
+                entry.opponentSizeConditions &= ~16L;
             }
         });
         unknown6OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 32L);
+                entry.opponentSizeConditions |= 32L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~32L);
+                entry.opponentSizeConditions &= ~32L;
             }
         });
         unknown7OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 64L);
+                entry.opponentSizeConditions |= 64L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~64L);
+                entry.opponentSizeConditions &= ~64L;
             }
         });
         unknown8OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 128L);
+                entry.opponentSizeConditions|= 128L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~128L);
+                entry.opponentSizeConditions &= ~128L;
             }
         });
 
@@ -1777,37 +1707,37 @@ public class Bcm {
         CheckBox unknown11OpponentSizeConditions = new CheckBox("Unknown 11"); 
         CheckBox unknown12OpponentSizeConditions = new CheckBox("Unknown 12");
 
-        unknown9OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 256L) != 0);        
-        unknown10OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 512L) != 0);       
-        unknown11OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 1024L) != 0);     
-        unknown12OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 2048L) != 0);    
+        unknown9OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 256L) != 0);        
+        unknown10OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 512L) != 0);       
+        unknown11OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 1024L) != 0);     
+        unknown12OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 2048L) != 0);    
         
         unknown9OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 256L);
+                entry.opponentSizeConditions |= 256L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~256L);
+                entry.opponentSizeConditions &= ~256L;
             }
         });
         unknown10OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 512L);
+                entry.opponentSizeConditions |= 512L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~512L);
+                entry.opponentSizeConditions &= ~512L;
             }
         });
         unknown11OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 1024L);
+                entry.opponentSizeConditions |= 1024L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~1024L);
+                entry.opponentSizeConditions &= ~1024L;
             }
         });
         unknown12OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 2048L);
+                entry.opponentSizeConditions |= 2048L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~2048L);
+                entry.opponentSizeConditions &= ~2048L;
             }
         });
 
@@ -1835,37 +1765,37 @@ public class Bcm {
         CheckBox unknown15OpponentSizeConditions = new CheckBox("Unknown 15"); 
         CheckBox unknown16OpponentSizeConditions = new CheckBox("Unknown 16");
 
-        unknown13OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 4096L) != 0);      
-        unknown14OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 8192L) != 0);      
-        unknown15OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 16384L) != 0);     
-        unknown16OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 32768L) != 0);         
+        unknown13OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 4096L) != 0);      
+        unknown14OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 8192L) != 0);      
+        unknown15OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 16384L) != 0);     
+        unknown16OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 32768L) != 0);         
 
         unknown13OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 4096L);
+                entry.opponentSizeConditions |= 4096L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~4096L);
+                entry.opponentSizeConditions &= ~4096L;
             }
         });
         unknown14OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 8192L);
+                entry.opponentSizeConditions |= 8192L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~8192L);
+                entry.opponentSizeConditions &= ~8192L;
             }
         });
         unknown15OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 16384L);
+                entry.opponentSizeConditions |= 16384L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~16384L);
+                entry.opponentSizeConditions &= ~16384L;
             }
         });
         unknown16OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 32768L);
+                entry.opponentSizeConditions |= 32768L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~32768L);
+                entry.opponentSizeConditions &= ~32768L;
             }
         });
 
@@ -1893,37 +1823,37 @@ public class Bcm {
         CheckBox unknown19OpponentSizeConditions = new CheckBox("Unknown 19"); 
         CheckBox unknown20OpponentSizeConditions = new CheckBox("Unknown 20");
 
-        unknown17OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 65536L) != 0);   
-        unknown18OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 131072L) != 0);    
-        unknown19OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 262144L) != 0);   
-        unknown20OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 524288L) != 0); 
+        unknown17OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 65536L) != 0);   
+        unknown18OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 131072L) != 0);    
+        unknown19OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 262144L) != 0);   
+        unknown20OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 524288L) != 0); 
 
         unknown17OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 65536L);
+                entry.opponentSizeConditions |= 65536L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~65536L);
+                entry.opponentSizeConditions &= ~65536L;
             }
         });
         unknown18OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 131072L);
+                entry.opponentSizeConditions |= 131072L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~131072L);
+                entry.opponentSizeConditions &= ~131072L;
             }
         });
         unknown19OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 262144L);
+                entry.opponentSizeConditions |= 262144L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~262144L);
+               entry.opponentSizeConditions &= ~262144L;
             }
         });
         unknown20OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 524288L);
+                entry.opponentSizeConditions |= 524288L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~524288L);
+                entry.opponentSizeConditions &= ~524288L;
             }
         });
 
@@ -1951,37 +1881,37 @@ public class Bcm {
         CheckBox unknown23OpponentSizeConditions = new CheckBox("Unknown 23"); 
         CheckBox unknown24OpponentSizeConditions = new CheckBox("Unknown 24");
 
-        unknown21OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 1048576L) != 0);   // Bit 20 (1048576)
-        unknown22OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 2097152L) != 0);   // Bit 21 (2097152)
-        unknown23OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 4194304L) != 0);   // Bit 22 (4194304)
-        unknown24OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 8388608L) != 0);   // Bit 23 (8388608)
+        unknown21OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 1048576L) != 0);
+        unknown22OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 2097152L) != 0);  
+        unknown23OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 4194304L) != 0);   
+        unknown24OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 8388608L) != 0);   
 
         unknown21OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 1048576L);
+                entry.opponentSizeConditions |= 1048576L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~1048576L);
+                entry.opponentSizeConditions &= ~1048576L;
             }
         });
         unknown22OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 2097152L);
+                entry.opponentSizeConditions |= 2097152L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~2097152L);
+                entry.opponentSizeConditions &= ~2097152L;
             }
         });
         unknown23OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 4194304L);
+                entry.opponentSizeConditions |= 4194304L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~4194304L);
+                entry.opponentSizeConditions &= ~4194304L;
             }
         });
         unknown24OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 8388608L);
+                entry.opponentSizeConditions |= 8388608L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~8388608L);
+                entry.opponentSizeConditions &= ~8388608L;
             }
         });
 
@@ -2009,37 +1939,37 @@ public class Bcm {
         CheckBox unknown27OpponentSizeConditions = new CheckBox("Unknown 27"); 
         CheckBox unknown28OpponentSizeConditions = new CheckBox("Unknown 28");
 
-        unknown25OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 16777216L) != 0); 
-        unknown26OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 33554432L) != 0);  
-        unknown27OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 67108864L) != 0);  
-        unknown28OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 134217728L) != 0); 
+        unknown25OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 16777216L) != 0); 
+        unknown26OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 33554432L) != 0);  
+        unknown27OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 67108864L) != 0);  
+        unknown28OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 134217728L) != 0); 
 
         unknown25OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 16777216L);
+                entry.opponentSizeConditions |= 16777216L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~16777216L);
+                entry.opponentSizeConditions &= ~16777216L;
             }
         });
         unknown26OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 33554432L);
+                entry.opponentSizeConditions |= 33554432L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~33554432L);
+                entry.opponentSizeConditions &= ~33554432L;
             }
         });
         unknown27OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 67108864L);
+                entry.opponentSizeConditions |= 67108864L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~67108864L);
+                entry.opponentSizeConditions &= ~67108864L;
             }
         });
         unknown28OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 134217728L);
+                entry.opponentSizeConditions |= 134217728L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~134217728L);
+                entry.opponentSizeConditions &= ~134217728L;
             }
         });
 
@@ -2067,37 +1997,37 @@ public class Bcm {
         CheckBox unknown31OpponentSizeConditions = new CheckBox("Unknown 31"); 
         CheckBox unknown32OpponentSizeConditions = new CheckBox("Unknown 32");
 
-        unknown29OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 268435456L) != 0); 
-        unknown30OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 536870912L) != 0);
-        unknown31OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 1073741824L) != 0);
-        unknown32OpponentSizeConditions.setSelected((getOpponentSizeConditions.get(i) & 2147483648L) != 0);
+        unknown29OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 268435456L) != 0); 
+        unknown30OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 536870912L) != 0);
+        unknown31OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 1073741824L) != 0);
+        unknown32OpponentSizeConditions.setSelected((entry.opponentSizeConditions & 2147483648L) != 0);
 
         unknown29OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 268435456L);
+                entry.opponentSizeConditions |= 268435456L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~268435456L);
+                entry.opponentSizeConditions &= ~268435456L;
             }
         });
         unknown30OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 536870912L);
+                entry.opponentSizeConditions |= 536870912L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~536870912L);
+                entry.opponentSizeConditions &= ~536870912L;
             }
         });
         unknown31OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 1073741824L);
+                entry.opponentSizeConditions |= 1073741824L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~1073741824L);
+                entry.opponentSizeConditions &= ~1073741824L;
             }
         });
         unknown32OpponentSizeConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) | 2147483648L);
+                entry.opponentSizeConditions |= 2147483648L;
             } else {
-                getOpponentSizeConditions.set(i, getOpponentSizeConditions.get(i) & ~2147483648L);
+                entry.opponentSizeConditions &= ~2147483648L;
             }
         });
 
@@ -2128,12 +2058,11 @@ public class Bcm {
 
         Spinner<Integer> minimumLoopDurationSpinner=new Spinner<>(0,65535,0);
         minimumLoopDurationSpinner.setEditable(true);
-        minimumLoopDurationSpinner.getValueFactory().setValue(getMinimumLoopDuration.get(i));
+        minimumLoopDurationSpinner.getValueFactory().setValue(entry.minimumLoopDuration);
         minimumLoopDurationSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getMinimumLoopDuration.set(i, newValue);
+                entry.minimumLoopDuration = newValue;
             }
-
         });
 
         minimumLoopDurationHBox.getChildren().addAll(minimumLoopDurationLabel,minimumLoopDurationSpinner);
@@ -2148,10 +2077,10 @@ public class Bcm {
         
         Spinner<Integer> maximumLoopDurationSpinner=new Spinner<>(0,65535,0);
         maximumLoopDurationSpinner.setEditable(true);
-        maximumLoopDurationSpinner.getValueFactory().setValue(getMaximumLoopDuration.get(i));
+        maximumLoopDurationSpinner.getValueFactory().setValue(entry.maximumLoopDuration);
         maximumLoopDurationSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getMaximumLoopDuration.set(i, newValue);
+                entry.maximumLoopDuration = newValue;
             }
 
         });
@@ -2178,37 +2107,37 @@ public class Bcm {
         CheckBox touchingGround = new CheckBox("Touching Ground"); 
         CheckBox onAttackHit = new CheckBox("On Attack Hit");
 
-        standing.setSelected((getPrimaryActivatorConditions.get(i) & 1L) != 0);
-        floating.setSelected((getPrimaryActivatorConditions.get(i) & 2L) != 0);
-        touchingGround.setSelected((getPrimaryActivatorConditions.get(i) & 4L) != 0);
-        onAttackHit.setSelected((getPrimaryActivatorConditions.get(i) & 8L) != 0);
+        standing.setSelected((entry.primaryActivatorConditions & 1L) != 0);
+        floating.setSelected((entry.primaryActivatorConditions & 2L) != 0);
+        touchingGround.setSelected((entry.primaryActivatorConditions & 4L) != 0);
+        onAttackHit.setSelected((entry.primaryActivatorConditions & 8L) != 0);
 
         standing.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 1L);
+                entry.primaryActivatorConditions |= 1L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~1L);
+                entry.primaryActivatorConditions &= ~1L;
             }
         });
         floating.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 2L);
+                entry.primaryActivatorConditions |= 2L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~2L);
+                entry.primaryActivatorConditions &= ~2L;
             }
         });
         touchingGround.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 4L);
+                entry.primaryActivatorConditions |= 4L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~4L);
+                entry.primaryActivatorConditions &= ~4L;
             }
         });
         onAttackHit.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 8L);
+                entry.primaryActivatorConditions |= 8L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~8L);
+                entry.primaryActivatorConditions &= ~8L;
             }
         });
 
@@ -2236,37 +2165,37 @@ public class Bcm {
         CheckBox farFromTarget = new CheckBox("Far From Target"); 
         CheckBox inBaseForm = new CheckBox("In Base Form");
 
-        attackBlocked.setSelected((getPrimaryActivatorConditions.get(i) & 16L) != 0);
-        closeToTarget.setSelected((getPrimaryActivatorConditions.get(i) & 32L) != 0);
-        farFromTarget.setSelected((getPrimaryActivatorConditions.get(i) & 64L) != 0);
-        inBaseForm.setSelected((getPrimaryActivatorConditions.get(i) & 128L) != 0);
+        attackBlocked.setSelected((entry.primaryActivatorConditions & 16L) != 0);
+        closeToTarget.setSelected((entry.primaryActivatorConditions & 32L) != 0);
+        farFromTarget.setSelected((entry.primaryActivatorConditions & 64L) != 0);
+        inBaseForm.setSelected((entry.primaryActivatorConditions & 128L) != 0);
 
         attackBlocked.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 16L);
+                entry.primaryActivatorConditions |= 16L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~16L);
+                entry.primaryActivatorConditions &= ~16L;
             }
         });
         closeToTarget.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 32L);
+                entry.primaryActivatorConditions |= 32L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~32L);
+                entry.primaryActivatorConditions &= ~32L;
             }
         });
         farFromTarget.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 64L);
+                entry.primaryActivatorConditions |= 64L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~64L);
+                entry.primaryActivatorConditions &= ~64L;
             }
         });
         inBaseForm.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 128L);
+                entry.primaryActivatorConditions |= 128L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~128L);
+                entry.primaryActivatorConditions &= ~128;
             }
         });
 
@@ -2294,37 +2223,37 @@ public class Bcm {
         CheckBox unknown11PrimaryActivatorConditions = new CheckBox("Unknown 11"); 
         CheckBox idle = new CheckBox("Idle");
 
-        inTransformedState.setSelected((getPrimaryActivatorConditions.get(i) & 256L) != 0);
-        flashOnOffUnlessTargeting.setSelected((getPrimaryActivatorConditions.get(i) & 512L) != 0);
-        unknown11PrimaryActivatorConditions.setSelected((getPrimaryActivatorConditions.get(i) & 1024L) != 0);
-        idle.setSelected((getPrimaryActivatorConditions.get(i) & 2048L) != 0);
+        inTransformedState.setSelected((entry.primaryActivatorConditions & 256L) != 0);
+        flashOnOffUnlessTargeting.setSelected((entry.primaryActivatorConditions & 512L) != 0);
+        unknown11PrimaryActivatorConditions.setSelected((entry.primaryActivatorConditions & 1024L) != 0);
+        idle.setSelected((entry.primaryActivatorConditions & 2048L) != 0);
 
         inTransformedState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 256L);
+                entry.primaryActivatorConditions |= 256L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~256L);
+                entry.primaryActivatorConditions &= ~256L;
             }
         });
         flashOnOffUnlessTargeting.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 512L);
+                entry.primaryActivatorConditions |= 512L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~512L);
+                entry.primaryActivatorConditions &= ~512L;
             }
         });
         unknown11PrimaryActivatorConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 1024L);
+                entry.primaryActivatorConditions |= 1024L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~1024L);
+                entry.primaryActivatorConditions &= ~1024L;
             }
         });
         idle.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 2048L);
+                entry.primaryActivatorConditions |= 2048L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~2048L);
+                entry.primaryActivatorConditions &= ~2048L;
             }
         });
 
@@ -2352,41 +2281,39 @@ public class Bcm {
         CheckBox kiBelow100 = new CheckBox("Ki < 100%"); 
         CheckBox kiAbove0 = new CheckBox("Ki > 0%");
 
-        counterMelee.setSelected((getPrimaryActivatorConditions.get(i) & 4096L) != 0);
-        counterProjectile.setSelected((getPrimaryActivatorConditions.get(i) & 8192L) != 0);
-        kiBelow100.setSelected((getPrimaryActivatorConditions.get(i) & 16384L) != 0);
-        kiAbove0.setSelected((getPrimaryActivatorConditions.get(i) & 32768L) != 0);
+        counterMelee.setSelected((entry.primaryActivatorConditions & 4096L) != 0);
+        counterProjectile.setSelected((entry.primaryActivatorConditions & 8192L) != 0);
+        kiBelow100.setSelected((entry.primaryActivatorConditions & 16384L) != 0);
+        kiAbove0.setSelected((entry.primaryActivatorConditions & 32768L) != 0);
 
         counterMelee.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 4096L);
+                entry.primaryActivatorConditions |= 4096L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~4096L);
+                entry.primaryActivatorConditions &= ~4096L;
             }
         });
         counterProjectile.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 8192L);
+                entry.primaryActivatorConditions |= 8192L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~8192L);
+                entry.primaryActivatorConditions &= ~8192L;
             }
         });
         kiBelow100.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 16384L);
+                entry.primaryActivatorConditions |= 16384L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~16384L);
+                entry.primaryActivatorConditions &= ~16384L;
             }
         });
         kiAbove0.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 32768L);
+                entry.primaryActivatorConditions |= 32768L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~32768L);
+                entry.primaryActivatorConditions &= ~32768L;
             }
         });
-
-        
 
         VBox counterKiAmountBox = new VBox(2, counterMelee, counterProjectile, kiBelow100, kiAbove0);
 
@@ -2412,37 +2339,37 @@ public class Bcm {
         CheckBox ground = new CheckBox("Ground"); 
         CheckBox opponent = new CheckBox("Opponent");
 
-        unknown17PrimaryActivatorConditions.setSelected((getPrimaryActivatorConditions.get(i) & 65536L) != 0);
-        unknown18PrimaryActivatorConditions.setSelected((getPrimaryActivatorConditions.get(i) & 131072L) != 0);
-        ground.setSelected((getPrimaryActivatorConditions.get(i) & 262144L) != 0);
-        opponent.setSelected((getPrimaryActivatorConditions.get(i) & 524288L) != 0);
+        unknown17PrimaryActivatorConditions.setSelected((entry.primaryActivatorConditions & 65536L) != 0);
+        unknown18PrimaryActivatorConditions.setSelected((entry.primaryActivatorConditions & 131072L) != 0);
+        ground.setSelected((entry.primaryActivatorConditions & 262144L) != 0);
+        opponent.setSelected((entry.primaryActivatorConditions & 524288L) != 0);
 
         unknown17PrimaryActivatorConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 65536L);
+                entry.primaryActivatorConditions |= 65536L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~65536L);
+                entry.primaryActivatorConditions &= ~65536L;
             }
         });
         unknown18PrimaryActivatorConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 131072L);
+                entry.primaryActivatorConditions |= 131072L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~131072L);
+                entry.primaryActivatorConditions &= ~131072L;
             }
         });
         ground.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 262144L);
+                entry.primaryActivatorConditions |= 262144L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~262144L);
+                entry.primaryActivatorConditions &= ~262144L;
             }
         });
         opponent.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 524288L);
+                entry.primaryActivatorConditions |= 524288L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~524288L);
+                entry.primaryActivatorConditions &= ~524288L;
             }
         });
 
@@ -2470,37 +2397,37 @@ public class Bcm {
         CheckBox targetingOpponent = new CheckBox("Targeting Opponent"); 
         CheckBox unknown24PrimaryActivatorConditions = new CheckBox("Unknown 24");
 
-        opponentKnockback.setSelected((getPrimaryActivatorConditions.get(i) & 1048576L) != 0);
-        unknown22PrimaryActivatorConditions.setSelected((getPrimaryActivatorConditions.get(i) & 2097152L) != 0);
-        targetingOpponent.setSelected((getPrimaryActivatorConditions.get(i) & 4194304L) != 0);
-        unknown24PrimaryActivatorConditions.setSelected((getPrimaryActivatorConditions.get(i) & 8388608L) != 0);
+        opponentKnockback.setSelected((entry.primaryActivatorConditions & 1048576L) != 0);
+        unknown22PrimaryActivatorConditions.setSelected((entry.primaryActivatorConditions & 2097152L) != 0);
+        targetingOpponent.setSelected((entry.primaryActivatorConditions & 4194304L) != 0);
+        unknown24PrimaryActivatorConditions.setSelected((entry.primaryActivatorConditions & 8388608L) != 0);
 
         opponentKnockback.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 1048576L);
+                entry.primaryActivatorConditions |= 1048576L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~1048576L);
+                entry.primaryActivatorConditions &= ~1048576L;
             }
         });
         unknown22PrimaryActivatorConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 2097152L);
+                entry.primaryActivatorConditions |= 2097152L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~2097152L);
+                entry.primaryActivatorConditions &= ~2097152L;
             }
         });
         targetingOpponent.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 4194304L);
+                entry.primaryActivatorConditions |= 4194304L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~4194304L);
+                entry.primaryActivatorConditions &= ~4194304L;
             }
         });
         unknown24PrimaryActivatorConditions.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 8388608L);
+                entry.primaryActivatorConditions |= 8388608L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~8388608L);
+                entry.primaryActivatorConditions &= ~8388608L;
             }
         });
 
@@ -2528,37 +2455,37 @@ public class Bcm {
         CheckBox notNearStageCeiling = new CheckBox("Not Near Stage Ceiling"); 
         CheckBox notNearCertainObjects = new CheckBox("Not Near Certain Objects");
 
-        activateProjectile.setSelected((getPrimaryActivatorConditions.get(i) & 16777216L) != 0);
-        staminaAboveZero.setSelected((getPrimaryActivatorConditions.get(i) & 33554432L) != 0);
-        notNearStageCeiling.setSelected((getPrimaryActivatorConditions.get(i) & 67108864L) != 0);
-        notNearCertainObjects.setSelected((getPrimaryActivatorConditions.get(i) & 134217728L) != 0);
+        activateProjectile.setSelected((entry.primaryActivatorConditions & 16777216L) != 0);
+        staminaAboveZero.setSelected((entry.primaryActivatorConditions & 33554432L) != 0);
+        notNearStageCeiling.setSelected((entry.primaryActivatorConditions & 67108864L) != 0);
+        notNearCertainObjects.setSelected((entry.primaryActivatorConditions & 134217728L) != 0);
 
         activateProjectile.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 16777216L);
+                entry.primaryActivatorConditions |= 16777216L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~16777216L);
+                entry.primaryActivatorConditions &= ~16777216L;
             }
         });
         staminaAboveZero.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 33554432L);
+                entry.primaryActivatorConditions |= 33554432L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~33554432L);
+                entry.primaryActivatorConditions &= ~33554432L;
             }
         });
         notNearStageCeiling.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 67108864L);
+                entry.primaryActivatorConditions |= 67108864L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~67108864L);
+                entry.primaryActivatorConditions &= ~67108864L;
             }
         });
         notNearCertainObjects.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 134217728L);
+                entry.primaryActivatorConditions |= 134217728L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~134217728L);
+                entry.primaryActivatorConditions &= ~134217728L;
             }
         });
 
@@ -2586,37 +2513,37 @@ public class Bcm {
         CheckBox currentBacEntryHits = new CheckBox("Current BAC Entry Hits"); 
         CheckBox usersHealth = new CheckBox("Users Health");
 
-        usersHealth_OneUse.setSelected((getPrimaryActivatorConditions.get(i) & 268435456L) != 0);
-        targetsHealthLessThan25.setSelected((getPrimaryActivatorConditions.get(i) & 536870912L) != 0);
-        currentBacEntryHits.setSelected((getPrimaryActivatorConditions.get(i) & 1073741824L) != 0);
-        usersHealth.setSelected((getPrimaryActivatorConditions.get(i) & 2147483648L) != 0);
+        usersHealth_OneUse.setSelected((entry.primaryActivatorConditions & 268435456L) != 0);
+        targetsHealthLessThan25.setSelected((entry.primaryActivatorConditions & 536870912L) != 0);
+        currentBacEntryHits.setSelected((entry.primaryActivatorConditions & 1073741824L) != 0);
+        usersHealth.setSelected((entry.primaryActivatorConditions & 2147483648L) != 0);
 
         usersHealth_OneUse.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 268435456L);
+                entry.primaryActivatorConditions |= 268435456L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~268435456L);
+                entry.primaryActivatorConditions &= ~268435456L;
             }
         });
         targetsHealthLessThan25.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 536870912L);
+                entry.primaryActivatorConditions |= 536870912L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~536870912L);
+                entry.primaryActivatorConditions &= ~536870912L;
             }
         });
         currentBacEntryHits.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 1073741824L);
+                entry.primaryActivatorConditions |= 1073741824L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~1073741824L);
+                entry.primaryActivatorConditions &= ~1073741824L;
             }
         });
         usersHealth.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) | 2147483648L);
+                entry.primaryActivatorConditions |= 2147483648L;
             } else {
-                getPrimaryActivatorConditions.set(i, getPrimaryActivatorConditions.get(i) & ~2147483648L);
+                entry.primaryActivatorConditions &= ~2147483648L;
             }
         });
 
@@ -2655,37 +2582,37 @@ public class Bcm {
         CheckBox boosting = new CheckBox("Boosting"); 
         CheckBox guarding = new CheckBox("Guarding");
 
-        idleActivatorState.setSelected((getActivatorState.get(i) & 1L) != 0);
-        comboSkill.setSelected((getActivatorState.get(i) & 2L) != 0);
-        boosting.setSelected((getActivatorState.get(i) & 4L) != 0);
-        guarding.setSelected((getActivatorState.get(i) & 8L) != 0);
+        idleActivatorState.setSelected((entry.activatorState & 1L) != 0);
+        comboSkill.setSelected((entry.activatorState & 2L) != 0);
+        boosting.setSelected((entry.activatorState & 4L) != 0);
+        guarding.setSelected((entry.activatorState & 8L) != 0);
 
         idleActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 1L);
+                entry.activatorState |= 1L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~1L);
+                entry.activatorState &= ~1L;
             }
         });
         comboSkill.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 2L);
+                entry.activatorState |= 2L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~2L);
+                entry.activatorState &= ~2L;
             }
         });
         boosting.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 4L);
+                entry.activatorState |= 4L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~4L);
+                entry.activatorState &= ~4L;
             }
         });
         guarding.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 8L);
+                entry.activatorState |= 8L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~8L);
+                entry.activatorState &= ~8L;
             }
         });
 
@@ -2704,37 +2631,37 @@ public class Bcm {
         CheckBox notBeingDamaged = new CheckBox("Not Being Damaged"); 
         CheckBox targetAttackingPlayer = new CheckBox("Target Attacking Player");
 
-        receivingDamage.setSelected((getActivatorState.get(i) & 16L) != 0);
-        jumping.setSelected((getActivatorState.get(i) & 32L) != 0);
-        notBeingDamaged.setSelected((getActivatorState.get(i) & 64L) != 0);
-        targetAttackingPlayer.setSelected((getActivatorState.get(i) & 128L) != 0);
+        receivingDamage.setSelected((entry.activatorState & 16L) != 0);
+        jumping.setSelected((entry.activatorState & 32L) != 0);
+        notBeingDamaged.setSelected((entry.activatorState & 64L) != 0);
+        targetAttackingPlayer.setSelected((entry.activatorState & 128L) != 0);
 
         receivingDamage.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 16L);
+                entry.activatorState |= 16L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~16L);
+                entry.activatorState &= ~16L;
             }
         });
         jumping.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 32L);
+                entry.activatorState |= 32L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~32L);
+                entry.activatorState &= ~32L;
             }
         });
         notBeingDamaged.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 64L);
+                entry.activatorState |= 64L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~64L);
+                entry.activatorState &= ~64L;
             }
         });
         targetAttackingPlayer.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 128L);
+                entry.activatorState |= 128L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~128L);
+                entry.activatorState &= ~128L;
             }
         });
 
@@ -2753,37 +2680,37 @@ public class Bcm {
         CheckBox left = new CheckBox("Left"); 
         CheckBox right = new CheckBox("Right");
 
-        forwards.setSelected((getActivatorState.get(i) & 256L) != 0);
-        backwards.setSelected((getActivatorState.get(i) & 512L) != 0);
-        left.setSelected((getActivatorState.get(i) & 1024L) != 0);
-        right.setSelected((getActivatorState.get(i) & 2048L) != 0);
+        forwards.setSelected((entry.activatorState & 256L) != 0);
+        backwards.setSelected((entry.activatorState & 512L) != 0);
+        left.setSelected((entry.activatorState & 1024L) != 0);
+        right.setSelected((entry.activatorState & 2048L) != 0);
 
         forwards.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 256L);
+                entry.activatorState |= 256L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~256L);
+                entry.activatorState &= ~256L;
             }
         });
         backwards.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 512L);
+                entry.activatorState |= 512L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~512L);
+                entry.activatorState &= ~512L;
             }
         });
         left.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 1024L);
+                entry.activatorState |= 1024L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~1024L);
+                entry.activatorState &= ~1024L;
             }
         });
         right.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 2048L);
+                entry.activatorState |= 2048L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~2048L);
+                entry.activatorState &= ~2048L;
             }
         });
 
@@ -2804,37 +2731,37 @@ public class Bcm {
         CheckBox unknown15ActivatorState = new CheckBox("Unknown 15"); 
         CheckBox unknown16ActivatorState = new CheckBox("Unknown 16");
 
-        unknown13ActivatorState.setSelected((getActivatorState.get(i) & 4096L) != 0);
-        unknown14ActivatorState.setSelected((getActivatorState.get(i) & 8192L) != 0);
-        unknown15ActivatorState.setSelected((getActivatorState.get(i) & 16384L) != 0);
-        unknown16ActivatorState.setSelected((getActivatorState.get(i) & 32768L) != 0);
+        unknown13ActivatorState.setSelected((entry.activatorState & 4096L) != 0);
+        unknown14ActivatorState.setSelected((entry.activatorState & 8192L) != 0);
+        unknown15ActivatorState.setSelected((entry.activatorState & 16384L) != 0);
+        unknown16ActivatorState.setSelected((entry.activatorState & 32768L) != 0);
 
         unknown13ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 4096L);
+                entry.activatorState |= 4096L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~4096L);
+                entry.activatorState &= ~4096L;
             }
         });
         unknown14ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 8192L);
+                entry.activatorState |= 8192L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~8192L);
+                entry.activatorState &= ~8192L;
             }
         });
         unknown15ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 16384L);
+                entry.activatorState |= 16384L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~16384L);
+                entry.activatorState &= ~16384L;
             }
         });
         unknown16ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 32768L);
+                entry.activatorState |= 32768L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~32768L);
+                entry.activatorState &= ~32768L;
             }
         });
 
@@ -2863,37 +2790,37 @@ public class Bcm {
         CheckBox unknown19ActivatorState = new CheckBox("Unknown 19"); 
         CheckBox unknown20ActivatorState = new CheckBox("Unknown 20");
 
-        unknown17ActivatorState.setSelected((getActivatorState.get(i) & 65536L) != 0);
-        unknown18ActivatorState.setSelected((getActivatorState.get(i) & 131072L) != 0);
-        unknown19ActivatorState.setSelected((getActivatorState.get(i) & 262144L) != 0);
-        unknown20ActivatorState.setSelected((getActivatorState.get(i) & 524288L) != 0);
+        unknown17ActivatorState.setSelected((entry.activatorState & 65536L) != 0);
+        unknown18ActivatorState.setSelected((entry.activatorState & 131072L) != 0);
+        unknown19ActivatorState.setSelected((entry.activatorState & 262144L) != 0);
+        unknown20ActivatorState.setSelected((entry.activatorState & 524288L) != 0);
 
         unknown17ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 65536L);
+                entry.activatorState |= 65536L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~65536L);
+                entry.activatorState &= ~65536L;
             }
         });
         unknown18ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 131072L);
+                entry.activatorState |= 131072L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~131072L);
+                entry.activatorState &= ~131072L;
             }
         });
         unknown19ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 262144L);
+                entry.activatorState |= 262144L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~262144L);
+                entry.activatorState &= ~262144L;
             }
         });
         unknown20ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 524288L);
+                entry.activatorState |= 524288L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~524288L);
+                entry.activatorState &= ~524288L;
             }
         });
 
@@ -2923,37 +2850,37 @@ public class Bcm {
         CheckBox unknown23ActivatorState = new CheckBox("Unknown 23"); 
         CheckBox unknown24ActivatorState = new CheckBox("Unknown 24");
 
-        unknown21ActivatorState.setSelected((getActivatorState.get(i) & 1048576L) != 0);
-        unknown22ActivatorState.setSelected((getActivatorState.get(i) & 2097152L) != 0);
-        unknown23ActivatorState.setSelected((getActivatorState.get(i) & 4194304L) != 0);
-        unknown24ActivatorState.setSelected((getActivatorState.get(i) & 8388608L) != 0);
+        unknown21ActivatorState.setSelected((entry.activatorState & 1048576L) != 0);
+        unknown22ActivatorState.setSelected((entry.activatorState & 2097152L) != 0);
+        unknown23ActivatorState.setSelected((entry.activatorState & 4194304L) != 0);
+        unknown24ActivatorState.setSelected((entry.activatorState & 8388608L) != 0);
 
         unknown21ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 1048576L);
+                entry.activatorState |= 1048576L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~1048576L);
+                entry.activatorState &= ~1048576L;
             }
         });
         unknown22ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 2097152L);
+                entry.activatorState |= 2097152L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~2097152L);
+                entry.activatorState &= ~2097152L;
             }
         });
         unknown23ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 4194304L);
+                entry.activatorState |= 4194304L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~4194304L);
+                entry.activatorState &= ~4194304L;
             }
         });
         unknown24ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 8388608L);
+                entry.activatorState |= 8388608L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~8388608L);
+                entry.activatorState &= ~8388608L;
             }
         });
         VBox activatorState6Box = new VBox(2, unknown21ActivatorState, unknown22ActivatorState, unknown23ActivatorState, unknown24ActivatorState);
@@ -2982,37 +2909,37 @@ public class Bcm {
         CheckBox unknown27ActivatorState = new CheckBox("Unknown 27"); 
         CheckBox unknown28ActivatorState = new CheckBox("Unknown 28");
 
-        unknown25ActivatorState.setSelected((getActivatorState.get(i) & 16777216L) != 0);
-        unknown26ActivatorState.setSelected((getActivatorState.get(i) & 33554432L) != 0);
-        unknown27ActivatorState.setSelected((getActivatorState.get(i) & 67108864L) != 0);
-        unknown28ActivatorState.setSelected((getActivatorState.get(i) & 134217728L) != 0);
+        unknown25ActivatorState.setSelected((entry.activatorState & 16777216L) != 0);
+        unknown26ActivatorState.setSelected((entry.activatorState & 33554432L) != 0);
+        unknown27ActivatorState.setSelected((entry.activatorState & 67108864L) != 0);
+        unknown28ActivatorState.setSelected((entry.activatorState & 134217728L) != 0);
 
         unknown25ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 16777216L);
+                entry.activatorState |= 16777216L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~16777216L);
+                entry.activatorState &= ~16777216L;
             }
         });
         unknown26ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 33554432L);
+                entry.activatorState |= 33554432L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~33554432L);
+                entry.activatorState &= ~33554432L;
             }
         });
         unknown27ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 67108864L);
+                entry.activatorState |= 67108864L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~67108864L);
+                entry.activatorState &= ~67108864L;
             }
         });
         unknown28ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 134217728L);
+                entry.activatorState |= 134217728L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~134217728L);
+                entry.activatorState &= ~134217728L;
             }
         });
 
@@ -3042,44 +2969,44 @@ public class Bcm {
         CheckBox unknown31ActivatorState = new CheckBox("Unknown 31"); 
         CheckBox unknown32ActivatorState = new CheckBox("Unknown 32");
 
-        unknown29ActivatorState.setSelected((getActivatorState.get(i) & 268435456L) != 0);
-        unknown30ActivatorState.setSelected((getActivatorState.get(i) & 536870912L) != 0);
-        unknown31ActivatorState.setSelected((getActivatorState.get(i) & 1073741824L) != 0);
-        unknown32ActivatorState.setSelected((getActivatorState.get(i) & 2147483648L) != 0);
+        unknown29ActivatorState.setSelected((entry.activatorState & 268435456L) != 0);
+        unknown30ActivatorState.setSelected((entry.activatorState & 536870912L) != 0);
+        unknown31ActivatorState.setSelected((entry.activatorState & 1073741824L) != 0);
+        unknown32ActivatorState.setSelected((entry.activatorState & 2147483648L) != 0);
 
         unknown28ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 134217728L);
+                entry.activatorState |= 134217728L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~134217728L);
+                entry.activatorState &= ~134217728L;
             }
         });
         unknown29ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 268435456L);
+                entry.activatorState |= 268435456L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~268435456L);
+                entry.activatorState &= ~268435456L;
             }
         });
         unknown30ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 536870912L);
+                entry.activatorState |= 536870912L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~536870912L);
+                entry.activatorState &= ~536870912L;
             }
         });
         unknown31ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 1073741824L);
+                entry.activatorState |= 1073741824L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~1073741824L);
+                entry.activatorState &= ~1073741824L;
             }
         });
         unknown32ActivatorState.selectedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                getActivatorState.set(i, getActivatorState.get(i) | 2147483648L);
+                entry.activatorState |= 2147483648L;
             } else {
-                getActivatorState.set(i, getActivatorState.get(i) & ~2147483648L);
+                entry.activatorState &= ~2147483648L;
             }
         });
 
@@ -3100,7 +3027,6 @@ public class Bcm {
         activatorStateGridPane.add(activatorState8StackPane, 3, 1); 
         //activator state box 8
 
-
         activatorStateHBox.getChildren().addAll(activatorStateLabel,activatorStateGridPane);
         activatorStateHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -3111,10 +3037,9 @@ public class Bcm {
         activator.setContent(scrollPane);
 
         return scrollPane;
-    
     }
 
-    private VBox createBACVBox(int i){
+    private VBox createBACVBox(BcmEntry entry){
 
         VBox BACVBox=new VBox(12);
         BACVBox.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
@@ -3127,12 +3052,11 @@ public class Bcm {
         
         Spinner<Integer> BACEntryPrimarySpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryPrimarySpinner.setEditable(true);
-        BACEntryPrimarySpinner.getValueFactory().setValue((int)getBACEntryPrimary.get(i));
+        BACEntryPrimarySpinner.getValueFactory().setValue((int)entry.bacEntryPrimary);
         BACEntryPrimarySpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryPrimary.set(i, newValue.shortValue());
+                entry.bacEntryPrimary = newValue.shortValue();
             }
-
         });
         
         BACEntryPrimaryHBox.getChildren().addAll(BACEntryPrimaryLabel,BACEntryPrimarySpinner);
@@ -3147,12 +3071,11 @@ public class Bcm {
 
         Spinner<Integer> BACEntryChargeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryChargeSpinner.setEditable(true);
-        BACEntryChargeSpinner.getValueFactory().setValue((int)getBACEntryCharge.get(i));
+        BACEntryChargeSpinner.getValueFactory().setValue((int)entry.bacEntryCharge);
         BACEntryChargeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryCharge.set(i, newValue.shortValue());
+                entry.bacEntryCharge = newValue.shortValue();
             }
-
         });
 
         BACEntryChargeHBox.getChildren().addAll(BACEntryChargeLabel,BACEntryChargeSpinner);
@@ -3167,12 +3090,11 @@ public class Bcm {
 
         Spinner<Integer> BACEntryUserConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryUserConnectSpinner.setEditable(true);
-        BACEntryUserConnectSpinner.getValueFactory().setValue((int)getBACEntryUserConnect.get(i));
+        BACEntryUserConnectSpinner.getValueFactory().setValue((int)entry.bacEntryUserConnect);
         BACEntryUserConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryUserConnect.set(i, newValue.shortValue());
+                entry.bacEntryUserConnect = newValue.shortValue();
             }
-
         });
 
         BACEntryUserConnectHBox.getChildren().addAll(BACEntryUserConnectLabel,BACEntryUserConnectSpinner);
@@ -3185,15 +3107,13 @@ public class Bcm {
         Label BACEntryVictimConnectLabel=new Label("BAC Entry Victim Connect");
         BACEntryVictimConnectLabel.setPrefWidth(160);
         
-
         Spinner<Integer> BACEntryVictimConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryVictimConnectSpinner.setEditable(true);
-        BACEntryVictimConnectSpinner.getValueFactory().setValue((int)getBACEntryVictimConnect.get(i));
+        BACEntryVictimConnectSpinner.getValueFactory().setValue((int)entry.bacEntryVictimConnect);
         BACEntryVictimConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryVictimConnect.set(i, newValue.shortValue());
+                entry.bacEntryVictimConnect = newValue.shortValue();
             }
-
         });
 
         BACEntryVictimConnectHBox.getChildren().addAll(BACEntryVictimConnectLabel,BACEntryVictimConnectSpinner);
@@ -3208,12 +3128,11 @@ public class Bcm {
 
         Spinner<Integer> BACEntryAirborneSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         BACEntryAirborneSpinner.setEditable(true);
-        BACEntryAirborneSpinner.getValueFactory().setValue((int)getBACEntryAirborne.get(i));
+        BACEntryAirborneSpinner.getValueFactory().setValue((int)entry.bacEntryAirborne);
         BACEntryAirborneSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryAirborne.set(i, newValue.shortValue());
+                entry.bacEntryAirborne = newValue.shortValue();
             }
-
         });
 
         BACEntryAirborneHBox.getChildren().addAll(BACEntryAirborneLabel,BACEntryAirborneSpinner);
@@ -3228,12 +3147,11 @@ public class Bcm {
 
         Spinner<Integer> BACEntryTargetingOverrideSpinner=new Spinner<>(0,65535,0);
         BACEntryTargetingOverrideSpinner.setEditable(true);
-        BACEntryTargetingOverrideSpinner.getValueFactory().setValue(getBACEntryTargetingOverride.get(i));
+        BACEntryTargetingOverrideSpinner.getValueFactory().setValue(entry.bacEntryTargetingOverride);
         BACEntryTargetingOverrideSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getBACEntryTargetingOverride.set(i, newValue);
+                entry.bacEntryTargetingOverride = newValue;
             }
-
         });
         
         BACEntryTargetingOverrideHBox.getChildren().addAll(BACEntryTargetingOverrideLabel,BACEntryTargetingOverrideSpinner);
@@ -3274,31 +3192,31 @@ public class Bcm {
         unknown9.setToggleGroup(randomFlagToggleGroup);
         none.setSelected(true);
 
-        if(getBACRandomFlags.get(i)==1){
+        if(entry.bacRandomFlags==1){
             randomBACEntry.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==2){
+        else if(entry.bacRandomFlags==2){
             noTargetCorrection.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==3){
+        else if(entry.bacRandomFlags==3){
             threeInstanceSetup.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==4){
+        else if(entry.bacRandomFlags==4){
             unknown4.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==5){
+        else if(entry.bacRandomFlags==5){
             unknown5.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==6){
+        else if(entry.bacRandomFlags==6){
             unknown6.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==7){
+        else if(entry.bacRandomFlags==7){
             unknown7.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==8){
+        else if(entry.bacRandomFlags==8){
             unknown8.setSelected(true);
         }
-        else if(getBACRandomFlags.get(i)==9){
+        else if(entry.bacRandomFlags==9){
             unknown9.setSelected(true);
         }
 
@@ -3306,34 +3224,34 @@ public class Bcm {
             if(newValue.isSelected()){
                 RadioButton selectedRadio = (RadioButton) newValue;
                 if (selectedRadio == none) { 
-                    getBACRandomFlags.set(i, 0);
+                    entry.bacRandomFlags = 0;
                 }
                 else if (selectedRadio == randomBACEntry) { 
-                    getBACRandomFlags.set(i, 1);
+                    entry.bacRandomFlags = 1;
                 }
                 else if (selectedRadio == noTargetCorrection) { 
-                    getBACRandomFlags.set(i, 2);
+                    entry.bacRandomFlags = 2;
                 }
                 else if (selectedRadio == threeInstanceSetup) { 
-                    getBACRandomFlags.set(i, 3);
+                    entry.bacRandomFlags = 3;
                 }
                 else if (selectedRadio == unknown4) { 
-                    getBACRandomFlags.set(i, 4);
+                    entry.bacRandomFlags = 4;
                 }
                 else if (selectedRadio == unknown5) { 
-                    getBACRandomFlags.set(i, 5);
+                    entry.bacRandomFlags = 5;
                 }
                 else if (selectedRadio == unknown6) { 
-                    getBACRandomFlags.set(i, 6);
+                    entry.bacRandomFlags = 6;
                 }
                 else if (selectedRadio == unknown7) { 
-                    getBACRandomFlags.set(i, 7);
+                    entry.bacRandomFlags = 7;
                 }
                 else if (selectedRadio == unknown8) { 
-                    getBACRandomFlags.set(i, 8);
+                    entry.bacRandomFlags = 8;
                 }
                 else if (selectedRadio == unknown9) { 
-                    getBACRandomFlags.set(i, 9);
+                    entry.bacRandomFlags = 9;
                 }
             }
         });
@@ -3352,16 +3270,12 @@ public class Bcm {
         randomFlagHBox.getChildren().addAll(randomFlagLabel,randomFlagGridPane);
         randomFlagHBox.setAlignment(Pos.CENTER_LEFT);
         //random flangs
-
         //BAC
-
         BACVBox.getChildren().addAll(BACEntryPrimaryHBox,BACEntryChargeHBox,BACEntryUserConnectHBox,BACEntryVictimConnectHBox,BACEntryAirborneHBox,BACEntryTargetingOverrideHBox,randomFlagHBox);
-        
         return BACVBox;
-
     }
 
-    private VBox createMiscVBox(int i){
+    private VBox createMiscVBox(BcmEntry entry){
         VBox miscVBox=new VBox(12);
         miscVBox.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
@@ -3373,12 +3287,11 @@ public class Bcm {
 
         Spinner<Double> kiCostSpinner=new Spinner<>(0,4294967295.0,0);
         kiCostSpinner.setEditable(true);
-        kiCostSpinner.getValueFactory().setValue((double)getKiCost.get(i));
+        kiCostSpinner.getValueFactory().setValue((double)entry.kiCost);
         kiCostSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getKiCost.set(i, newValue.longValue());
+                entry.kiCost = newValue.longValue();
             }
-
         });
 
         kiCostHBox.getChildren().addAll(kiCostLabel,kiCostSpinner);
@@ -3393,10 +3306,10 @@ public class Bcm {
 
         Spinner<Double> receiverLinkIdSpinner=new Spinner<>(0,4294967295.0,0);
         receiverLinkIdSpinner.setEditable(true);
-        receiverLinkIdSpinner.getValueFactory().setValue((double)getReceiverLinkId.get(i));
+        receiverLinkIdSpinner.getValueFactory().setValue((double)entry.receiverLinkId);
         receiverLinkIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getReceiverLinkId.set(i, newValue.longValue());
+                entry.receiverLinkId = newValue.longValue();
             }
         });
 
@@ -3412,10 +3325,10 @@ public class Bcm {
 
         Spinner<Double> staminaCostSpinner=new Spinner<>(0,4294967295.0,0);
         staminaCostSpinner.setEditable(true);
-        staminaCostSpinner.getValueFactory().setValue((double)getStaminaCost.get(i));
+        staminaCostSpinner.getValueFactory().setValue((double)entry.staminaCost);
         staminaCostSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getStaminaCost.set(i, newValue.longValue());
+                entry.staminaCost = newValue.longValue();
             }
         });
         
@@ -3431,10 +3344,10 @@ public class Bcm {
 
         Spinner<Double> kiRequiredSpinner=new Spinner<>(0,4294967295.0,0);
         kiRequiredSpinner.setEditable(true);
-        kiRequiredSpinner.getValueFactory().setValue((double)getKiRequired.get(i));
+        kiRequiredSpinner.getValueFactory().setValue((double)entry.kiRequired);
         kiRequiredSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getKiRequired.set(i, newValue.longValue());
+                entry.kiRequired = newValue.longValue();
             }
         });
 
@@ -3450,10 +3363,10 @@ public class Bcm {
 
         Spinner<Double> healthRequiredSpinner=new Spinner<>(Float.MIN_VALUE,Float.MAX_VALUE,0.0);
         healthRequiredSpinner.setEditable(true);
-        healthRequiredSpinner.getValueFactory().setValue((double)getHealthRequired.get(i));
+        healthRequiredSpinner.getValueFactory().setValue((double)entry.healthRequired);
         healthRequiredSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getHealthRequired.set(i, newValue.floatValue());
+                entry.healthRequired = newValue.floatValue();
             }
         });
 
@@ -3469,10 +3382,10 @@ public class Bcm {
 
         Spinner<Integer> transformationStageSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         transformationStageSpinner.setEditable(true);
-        transformationStageSpinner.getValueFactory().setValue((int)getTransformationStage.get(i));
+        transformationStageSpinner.getValueFactory().setValue((int)entry.transformationStage);
         transformationStageSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getTransformationStage.set(i, newValue.shortValue());
+                entry.transformationStage = newValue.shortValue();
             }
         });
 
@@ -3488,10 +3401,10 @@ public class Bcm {
 
         Spinner<Integer> cusAuraSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,0);
         cusAuraSpinner.setEditable(true);
-        cusAuraSpinner.getValueFactory().setValue((int)getTransformationStage.get(i));
+        cusAuraSpinner.getValueFactory().setValue((int)entry.cusAura);
         cusAuraSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
-                getTransformationStage.set(i, newValue.shortValue());
+                entry.cusAura = newValue.shortValue();
             }
         });
         cusAuraHBox.getChildren().addAll(cusAuraLabel,cusAuraSpinner);
@@ -3532,65 +3445,65 @@ public class Bcm {
         femaleMajinsOnly.setToggleGroup(raceGenderToggleGroup);
         allCharactersDefault.setSelected(true);
 
-        if(getRaceGender.get(i)==1){
+        if(entry.raceGender==1){
             rosterCharactersOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==2){
+        else if(entry.raceGender==2){
             maleHumansOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==3){
+        else if(entry.raceGender==3){
             femaleHumansOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==4){
+        else if(entry.raceGender==4){
             maleSaiyansOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==5){
+        else if(entry.raceGender==5){
             femaleSaiyansOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==6){
+        else if(entry.raceGender==6){
             namekiansOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==7){
+        else if(entry.raceGender==7){
            friezaRaceOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==8){
+        else if(entry.raceGender==8){
             maleMajinsOnly.setSelected(true);
         }
-        else if(getRaceGender.get(i)==9){
+        else if(entry.raceGender==9){
             femaleMajinsOnly.setSelected(true);
         }
         raceGenderToggleGroup.selectedToggleProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue.isSelected()) {
                 RadioButton selectedRadio = (RadioButton) newValue;
                 if (selectedRadio == allCharactersDefault) {
-                    getRaceGender.set(i, 0L);
+                    entry.raceGender = 0L;
                 }
                 else if (selectedRadio == rosterCharactersOnly) {
-                    getRaceGender.set(i, 1L);
+                    entry.raceGender = 1L;
                 }
                 else if (selectedRadio == maleHumansOnly) {
-                    getRaceGender.set(i, 2L);
+                    entry.raceGender = 2L;
                 }
                 else if (selectedRadio == femaleHumansOnly) {
-                    getRaceGender.set(i, 3L);
+                    entry.raceGender = 3L;
                 }
                 else if (selectedRadio == maleSaiyansOnly) {
-                    getRaceGender.set(i, 4L);
+                    entry.raceGender = 4L;
                 }
                 else if (selectedRadio == femaleSaiyansOnly) {
-                    getRaceGender.set(i, 5L);
+                    entry.raceGender = 5L;
                 }
                 else if (selectedRadio == namekiansOnly) {
-                    getRaceGender.set(i, 6L);
+                    entry.raceGender = 6L;
                 }
                 else if (selectedRadio == friezaRaceOnly) {
-                    getRaceGender.set(i, 7L);
+                    entry.raceGender = 7L;
                 }
                 else if (selectedRadio == maleMajinsOnly) {
-                    getRaceGender.set(i, 8L);
+                    entry.raceGender = 8L;
                 }
                 else if (selectedRadio == femaleMajinsOnly) {
-                    getRaceGender.set(i, 9L);
+                    entry.raceGender = 9L;
                 }
             }
         });
@@ -3613,29 +3526,25 @@ public class Bcm {
         return miscVBox;
     }
 
-    private VBox createUnknownVBox(int i){
+    private VBox createUnknownVBox(BcmEntry entry){
         // Tab unknown=new Tab("Unknown");
         // unknown.setClosable(false);
 
         VBox unknownVBox=new VBox(20);
         unknownVBox.setPadding(new Insets(20,0,0,8));
 
-        
-        
-
         //I_00
         HBox unknown00HBox=new HBox(2);
         unknown00HBox.setPadding(new Insets(20,0,0,8));
         Label lblI00=new Label("I_00: ");
         lblI00.setPrefWidth(120);
-        TextField txtI00=new TextField(String.valueOf(getUnknown0.get(i)));
+        TextField txtI00=new TextField(String.valueOf(entry.unknown0));
         txtI00.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI00.getText().contains("-")) {
                 return;
             }
             try {
-                
-                getUnknown0.set(i, Long.parseLong(newText)); 
+                entry.unknown0 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -3650,13 +3559,13 @@ public class Bcm {
         unknown36HBox.setPadding(new Insets(20,0,0,8));
         Label lblI36=new Label("I_36: ");
         lblI36.setPrefWidth(120);
-        TextField txtI36=new TextField(String.valueOf(getUnknown36.get(i)));
+        TextField txtI36=new TextField(String.valueOf(entry.unknown36));
         txtI36.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI36.getText().contains("-")) {
                 return;
             }
             try {
-                getUnknown36.set(i, Short.parseShort(newText)); 
+                entry.unknown36 = Short.parseShort(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -3669,13 +3578,13 @@ public class Bcm {
         unknown68HBox.setPadding(new Insets(20,0,0,8));
         Label lblI68=new Label("I_68: ");
         lblI68.setPrefWidth(120);
-        TextField txtI68=new TextField(String.valueOf(getUnknown68.get(i)));
+        TextField txtI68=new TextField(String.valueOf(entry.unknown68));
         txtI68.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI68.getText().contains("-")) {
                 return;
             }
             try {
-                getUnknown68.set(i, Long.parseLong(newText)); 
+                entry.unknown68 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 
@@ -3691,13 +3600,13 @@ public class Bcm {
         unknown72HBox.setPadding(new Insets(20,0,0,8));
         Label lblI72=new Label("I_72: ");
         lblI72.setPrefWidth(120);
-        TextField txtI72=new TextField(String.valueOf(getUnknown72.get(i)));
+        TextField txtI72=new TextField(String.valueOf(entry.unknown72));
         txtI72.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI72.getText().contains("-")) {
                 return;
             }
             try {
-                getUnknown72.set(i, Long.parseLong(newText)); 
+                entry.unknown72 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 
@@ -3712,13 +3621,13 @@ public class Bcm {
         unknown80HBox.setPadding(new Insets(20,0,0,8));
         Label lblI80=new Label("I_80: ");
         lblI80.setPrefWidth(120);
-        TextField txtI80=new TextField(String.valueOf(getUnknown80.get(i)));
+        TextField txtI80=new TextField(String.valueOf(entry.unknown80));
         txtI80.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI80.getText().contains("-")) {
                 return;
             }
             try {
-                getUnknown80.set(i, Long.parseLong(newText)); 
+                entry.unknown80 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 
@@ -3734,13 +3643,13 @@ public class Bcm {
         unknown88HBox.setPadding(new Insets(20,0,0,8));
         Label lblI88=new Label("I_88: ");
         lblI88.setPrefWidth(120);
-        TextField txtI88=new TextField(String.valueOf(getUnknown88.get(i)));
+        TextField txtI88=new TextField(String.valueOf(entry.unknown88));
         txtI88.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI88.getText().contains("-")) {
                 return;
             }
             try {
-                getUnknown88.set(i, Long.parseLong(newText)); 
+                entry.unknown88 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 
@@ -3755,14 +3664,13 @@ public class Bcm {
         unknown104HBox.setPadding(new Insets(20,0,0,8));
         Label lblI104=new Label("Skill Upgrade Value?: ");
         lblI104.setPrefWidth(120);
-        TextField txtI104=new TextField(String.valueOf(getUnknown104.get(i)));
+        TextField txtI104=new TextField(String.valueOf(entry.unknown104));
         txtI104.textProperty().addListener((obs, oldText, newText) -> {
             if (txtI104.getText().contains("-")) {
                 return;
             }
             try {
-                
-                getUnknown104.set(i, Long.parseLong(newText)); 
+                entry.unknown104 = Long.parseLong(newText); 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -3789,19 +3697,19 @@ public class Bcm {
 
 
             // //input tab
-            tabPane.getTabs().get(0).setContent(createInputsVBox(treeView.getRow(currentEntry)));
+            tabPane.getTabs().get(0).setContent(createInputsVBox(bcmEntries.get(treeView.getRow(currentEntry))));
    
             // //activator tab
-            tabPane.getTabs().get(1).setContent(createActivatorScrollPane(treeView.getRow(currentEntry)));
+            tabPane.getTabs().get(1).setContent(createActivatorScrollPane(bcmEntries.get(treeView.getRow(currentEntry))));
 
             // //BAC tab
-            tabPane.getTabs().get(2).setContent(createBACVBox(treeView.getRow(currentEntry)));
+            tabPane.getTabs().get(2).setContent(createBACVBox(bcmEntries.get(treeView.getRow(currentEntry))));
        
             // //misc tab
-            tabPane.getTabs().get(3).setContent(createMiscVBox(treeView.getRow(currentEntry)));
+            tabPane.getTabs().get(3).setContent(createMiscVBox(bcmEntries.get(treeView.getRow(currentEntry))));
             
             //unknown tab
-            tabPane.getTabs().get(4).setContent(createUnknownVBox(treeView.getRow(currentEntry)));
+            tabPane.getTabs().get(4).setContent(createUnknownVBox(bcmEntries.get(treeView.getRow(currentEntry))));
         });
         treeView.setOnMouseClicked(e->{
             if(e.getButton()==MouseButton.SECONDARY){
@@ -3837,7 +3745,6 @@ public class Bcm {
                     }
                     if(event.getTarget()==addComment){
                         AddComment();
-
                     }
                 });
             }
@@ -3867,7 +3774,6 @@ public class Bcm {
             }
             if(e.isControlDown()&&e.getCode()==KeyCode.Q){
                 AddComment();
-                
             }
         });
     }
@@ -3877,87 +3783,20 @@ public class Bcm {
             return;
         }
 
-        // Copy Inputs
-        copyDirectionalInputs = getDirectionalInputs.get(treeView.getRow(currentEntry));
-        copyButtonInputs = getButtonInputs.get(treeView.getRow(currentEntry));
-        copyHoldDownConditions = getHoldDownConditions.get(treeView.getRow(currentEntry));
-
-        // Copy Activator configurations
-        copyOpponentSizeConditions = getOpponentSizeConditions.get(treeView.getRow(currentEntry));
-        copyMinimumLoopDuration = getMinimumLoopDuration.get(treeView.getRow(currentEntry));
-        copyMaximumLoopDuration = getMaximumLoopDuration.get(treeView.getRow(currentEntry));
-        copyPrimaryActivatorConditions = getPrimaryActivatorConditions.get(treeView.getRow(currentEntry));
-        copyActivatorState = getActivatorState.get(treeView.getRow(currentEntry));
-
-        // Copy BAC parameters
-        copyBACEntryPrimary = getBACEntryPrimary.get(treeView.getRow(currentEntry));
-        copyBACEntryCharge = getBACEntryCharge.get(treeView.getRow(currentEntry));
-        copyBACEntryUserConnect = getBACEntryUserConnect.get(treeView.getRow(currentEntry));
-        copyBACEntryVictimConnect = getBACEntryVictimConnect.get(treeView.getRow(currentEntry));
-        copyBACEntryAirborne = getBACEntryAirborne.get(treeView.getRow(currentEntry));
-        copyBACEntryTargetingOverride = getBACEntryTargetingOverride.get(treeView.getRow(currentEntry));
-        copyBACRandomFlags = getBACRandomFlags.get(treeView.getRow(currentEntry));
-
-        // Copy Misc parameters
-        copyKiCost = getKiCost.get(treeView.getRow(currentEntry));
-        copyReceiverLinkId = getReceiverLinkId.get(treeView.getRow(currentEntry));
-        copyStaminaCost = getStaminaCost.get(treeView.getRow(currentEntry));
-        copyKiRequired = getKiRequired.get(treeView.getRow(currentEntry));
-        copyHealthRequired = getHealthRequired.get(treeView.getRow(currentEntry));
-        copyTransformationStage = getTransformationStage.get(treeView.getRow(currentEntry));
-        copyCusAura = getCusAura.get(treeView.getRow(currentEntry));
-        copyRaceGender = getRaceGender.get(treeView.getRow(currentEntry));
-
-        // Copy Unknown fields
-        copyUnknown0 = getUnknown0.get(treeView.getRow(currentEntry));
-        copyUnknown36 = getUnknown36.get(treeView.getRow(currentEntry));
-        copyUnknown68 = getUnknown68.get(treeView.getRow(currentEntry));
-        copyUnknown72 = getUnknown72.get(treeView.getRow(currentEntry));
-        copyUnknown80 = getUnknown80.get(treeView.getRow(currentEntry));
-        copyUnknown88 = getUnknown88.get(treeView.getRow(currentEntry));
-        copyUnknown104 = getUnknown104.get(treeView.getRow(currentEntry));
+        copyBcmEntryBuffer = new BcmEntry(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex()));
     }
     private void Paste() {
         if (currentEntry == null) {
             return;
         }
-        getDirectionalInputs.set(treeView.getRow(currentEntry), copyDirectionalInputs);
-        getButtonInputs.set(treeView.getRow(currentEntry), copyButtonInputs);
-        getHoldDownConditions.set(treeView.getRow(currentEntry), copyHoldDownConditions);
-        getOpponentSizeConditions.set(treeView.getRow(currentEntry), copyOpponentSizeConditions);
-        getMinimumLoopDuration.set(treeView.getRow(currentEntry), copyMinimumLoopDuration);
-        getMaximumLoopDuration.set(treeView.getRow(currentEntry), copyMaximumLoopDuration);
-        getPrimaryActivatorConditions.set(treeView.getRow(currentEntry), copyPrimaryActivatorConditions);
-        getActivatorState.set(treeView.getRow(currentEntry), copyActivatorState);
-        getBACEntryPrimary.set(treeView.getRow(currentEntry), copyBACEntryPrimary);
-        getBACEntryCharge.set(treeView.getRow(currentEntry), copyBACEntryCharge);
-        getBACEntryUserConnect.set(treeView.getRow(currentEntry), copyBACEntryUserConnect);
-        getBACEntryVictimConnect.set(treeView.getRow(currentEntry), copyBACEntryVictimConnect);
-        getBACEntryAirborne.set(treeView.getRow(currentEntry), copyBACEntryAirborne);
-        getBACEntryTargetingOverride.set(treeView.getRow(currentEntry), copyBACEntryTargetingOverride);
-        getBACRandomFlags.set(treeView.getRow(currentEntry), copyBACRandomFlags);
-        getKiCost.set(treeView.getRow(currentEntry), copyKiCost);
-        getReceiverLinkId.set(treeView.getRow(currentEntry), copyReceiverLinkId);
-        getStaminaCost.set(treeView.getRow(currentEntry), copyStaminaCost);
-        getKiRequired.set(treeView.getRow(currentEntry), copyKiRequired);
-        getHealthRequired.set(treeView.getRow(currentEntry), copyHealthRequired);
-        getTransformationStage.set(treeView.getRow(currentEntry), copyTransformationStage);
-        getCusAura.set(treeView.getRow(currentEntry), copyCusAura);
-        getRaceGender.set(treeView.getRow(currentEntry), copyRaceGender);
-        getUnknown0.set(treeView.getRow(currentEntry), copyUnknown0);
-        getUnknown36.set(treeView.getRow(currentEntry), copyUnknown36);
-        getUnknown68.set(treeView.getRow(currentEntry), copyUnknown68);
-        getUnknown72.set(treeView.getRow(currentEntry), copyUnknown72);
-        getUnknown80.set(treeView.getRow(currentEntry), copyUnknown80);
-        getUnknown88.set(treeView.getRow(currentEntry), copyUnknown88);
-        getUnknown104.set(treeView.getRow(currentEntry), copyUnknown104);
+        bcmEntries.set(treeView.getSelectionModel().getSelectedIndex(), new BcmEntry(copyBcmEntryBuffer));
 
         if (treeView.getSelectionModel().getSelectedItem() != null) {
-            tabPane.getTabs().get(0).setContent(createInputsVBox(treeView.getSelectionModel().getSelectedIndex()));
-            tabPane.getTabs().get(1).setContent(createActivatorScrollPane(treeView.getSelectionModel().getSelectedIndex()));
-            tabPane.getTabs().get(2).setContent(createBACVBox(treeView.getSelectionModel().getSelectedIndex()));
-            tabPane.getTabs().get(3).setContent(createMiscVBox(treeView.getSelectionModel().getSelectedIndex()));
-            tabPane.getTabs().get(4).setContent(createUnknownVBox(treeView.getSelectionModel().getSelectedIndex()));
+            tabPane.getTabs().get(0).setContent(createInputsVBox(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
+            tabPane.getTabs().get(1).setContent(createActivatorScrollPane(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
+            tabPane.getTabs().get(2).setContent(createBACVBox(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
+            tabPane.getTabs().get(3).setContent(createMiscVBox(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
+            tabPane.getTabs().get(4).setContent(createUnknownVBox(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
         }
         
     }
@@ -3965,37 +3804,8 @@ public class Bcm {
         if (currentEntry == null || currentEntry.getParent() == null) {
             return;
         }
-        getDirectionalInputs.remove(treeView.getRow(currentEntry));
-        getButtonInputs.remove(treeView.getRow(currentEntry));
-        getHoldDownConditions.remove(treeView.getRow(currentEntry));
-        getOpponentSizeConditions.remove(treeView.getRow(currentEntry));
-        getMinimumLoopDuration.remove(treeView.getRow(currentEntry));
-        getMaximumLoopDuration.remove(treeView.getRow(currentEntry));
-        getPrimaryActivatorConditions.remove(treeView.getRow(currentEntry));
-        getActivatorState.remove(treeView.getRow(currentEntry));
-        getBACEntryPrimary.remove(treeView.getRow(currentEntry));
-        getBACEntryCharge.remove(treeView.getRow(currentEntry));
-        getBACEntryUserConnect.remove(treeView.getRow(currentEntry));
-        getBACEntryVictimConnect.remove(treeView.getRow(currentEntry));
-        getBACEntryAirborne.remove(treeView.getRow(currentEntry));
-        getBACEntryTargetingOverride.remove(treeView.getRow(currentEntry));
-        getBACRandomFlags.remove(treeView.getRow(currentEntry));
-        getKiCost.remove(treeView.getRow(currentEntry));
-        getReceiverLinkId.remove(treeView.getRow(currentEntry));
-        getStaminaCost.remove(treeView.getRow(currentEntry));
-        getKiRequired.remove(treeView.getRow(currentEntry));
-        getHealthRequired.remove(treeView.getRow(currentEntry));
-        getTransformationStage.remove(treeView.getRow(currentEntry));
-        getCusAura.remove(treeView.getRow(currentEntry));
-        getRaceGender.remove(treeView.getRow(currentEntry));
-        getUnknown0.remove(treeView.getRow(currentEntry));
-        getUnknown36.remove(treeView.getRow(currentEntry));
-        getUnknown68.remove(treeView.getRow(currentEntry));
-        getUnknown72.remove(treeView.getRow(currentEntry));
-        getUnknown80.remove(treeView.getRow(currentEntry));
-        getUnknown88.remove(treeView.getRow(currentEntry));
-        getUnknown104.remove(treeView.getRow(currentEntry));
-
+        
+        bcmEntries.remove(treeView.getSelectionModel().getSelectedIndex());
         currentEntry.getParent().getChildren().remove(currentEntry);
         allEntries.remove(treeView.getSelectionModel().getSelectedIndex());
 
@@ -4008,40 +3818,8 @@ public class Bcm {
         if (parent != null) {
             TreeItem<String> newEntry = new TreeItem<>("New Entry");
             int currentPos = parent.getChildren().indexOf(currentEntry);
-            
             parent.getChildren().add(currentPos + 1, newEntry);
-
-            getDirectionalInputs.add(treeView.getRow(currentEntry) + 1, 0L);
-            getButtonInputs.add(treeView.getRow(currentEntry) + 1, 0L);
-            getHoldDownConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-            getOpponentSizeConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-            getMinimumLoopDuration.add(treeView.getRow(currentEntry) + 1, 0);
-            getMaximumLoopDuration.add(treeView.getRow(currentEntry) + 1, 0);
-            getPrimaryActivatorConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-            getActivatorState.add(treeView.getRow(currentEntry) + 1, 0L);
-            getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) + 1, 0);
-            getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, 0);
-            getKiCost.add(treeView.getRow(currentEntry) + 1, 0L);
-            getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0L);
-            getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0L);
-            getKiRequired.add(treeView.getRow(currentEntry) + 1, 0L);
-            getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0f);
-            getTransformationStage.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getCusAura.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getRaceGender.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown0.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown36.add(treeView.getRow(currentEntry) + 1, (short)0);
-            getUnknown68.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown72.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown80.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown88.add(treeView.getRow(currentEntry) + 1, 0L);
-            getUnknown104.add(treeView.getRow(currentEntry) + 1, 0L);
-
+            bcmEntries.add(treeView.getRow(currentEntry) + 1, new BcmEntry());
             allEntries.add(treeView.getRow(currentEntry) + 1, newEntry);
             int[] index = {0};
             renameTreeItems(treeView.getRoot(), index);
@@ -4052,42 +3830,9 @@ public class Bcm {
         if (parent != null) {
             TreeItem<String> newEntry = new TreeItem<>("New Entry");
             int currentPos = parent.getChildren().indexOf(currentEntry);
-            
             parent.getChildren().add(currentPos, newEntry);
-
-            getDirectionalInputs.add(treeView.getRow(currentEntry) - 1, 0L);
-            getButtonInputs.add(treeView.getRow(currentEntry) - 1, 0L);
-            getHoldDownConditions.add(treeView.getRow(currentEntry) - 1, 0L);
-            getOpponentSizeConditions.add(treeView.getRow(currentEntry) - 1, 0L);
-            getMinimumLoopDuration.add(treeView.getRow(currentEntry) - 1, 0);
-            getMaximumLoopDuration.add(treeView.getRow(currentEntry) - 1, 0);
-            getPrimaryActivatorConditions.add(treeView.getRow(currentEntry) - 1, 0L);
-            getActivatorState.add(treeView.getRow(currentEntry) - 1, 0L);
-            getBACEntryPrimary.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getBACEntryCharge.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getBACEntryUserConnect.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getBACEntryVictimConnect.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getBACEntryAirborne.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) - 1, 0);
-            getBACRandomFlags.add(treeView.getRow(currentEntry) - 1, 0);
-            getKiCost.add(treeView.getRow(currentEntry) - 1, 0L);
-            getReceiverLinkId.add(treeView.getRow(currentEntry) - 1, 0L);
-            getStaminaCost.add(treeView.getRow(currentEntry) - 1, 0L);
-            getKiRequired.add(treeView.getRow(currentEntry) - 1, 0L);
-            getHealthRequired.add(treeView.getRow(currentEntry) - 1, 0f);
-            getTransformationStage.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getCusAura.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getRaceGender.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown0.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown36.add(treeView.getRow(currentEntry) - 1, (short)0);
-            getUnknown68.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown72.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown80.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown88.add(treeView.getRow(currentEntry) - 1, 0L);
-            getUnknown104.add(treeView.getRow(currentEntry) - 1, 0L);
-
+            bcmEntries.add(treeView.getRow(currentEntry) - 1, new BcmEntry());
             allEntries.add(treeView.getRow(currentEntry) - 1, newEntry);
-
             int[] index = {0};
             renameTreeItems(treeView.getRoot(), index);
         }
@@ -4096,69 +3841,13 @@ public class Bcm {
         if (currentEntry == null) {
             return;
         }
-
         TreeItem<String> newChild = new TreeItem<>("New Entry");
         currentEntry.getChildren().add(newChild);
         currentEntry.setExpanded(true);
-
-        // 1. Insert default data into the Inputs lists
-        getDirectionalInputs.add(treeView.getRow(currentEntry) + 1, 0L);
-        getButtonInputs.add(treeView.getRow(currentEntry) + 1, 0L);
-        getHoldDownConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-
-        // 2. Insert default data into the Activator lists
-        getOpponentSizeConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-        getMinimumLoopDuration.add(treeView.getRow(currentEntry) + 1, 0);
-        getMaximumLoopDuration.add(treeView.getRow(currentEntry) + 1, 0);
-        getPrimaryActivatorConditions.add(treeView.getRow(currentEntry) + 1, 0L);
-        getActivatorState.add(treeView.getRow(currentEntry) + 1, 0L);
-
-        // 3. Insert default data into the BAC lists
-        getBACEntryPrimary.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getBACEntryCharge.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getBACEntryUserConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getBACEntryVictimConnect.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getBACEntryAirborne.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getBACEntryTargetingOverride.add(treeView.getRow(currentEntry) + 1, 0);
-        getBACRandomFlags.add(treeView.getRow(currentEntry) + 1, 0);
-
-        // 4. Insert default data into the Misc lists
-        getKiCost.add(treeView.getRow(currentEntry) + 1, 0L);
-        getReceiverLinkId.add(treeView.getRow(currentEntry) + 1, 0L);
-        getStaminaCost.add(treeView.getRow(currentEntry) + 1, 0L);
-        getKiRequired.add(treeView.getRow(currentEntry) + 1, 0L);
-        getHealthRequired.add(treeView.getRow(currentEntry) + 1, 0f);
-        getTransformationStage.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getCusAura.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getRaceGender.add(treeView.getRow(currentEntry) + 1, 0L);
-
-        // 5. Insert default data into the Unknown lists
-        getUnknown0.add(treeView.getRow(currentEntry) + 1, 0L);
-        getUnknown36.add(treeView.getRow(currentEntry) + 1, (short)0);
-        getUnknown68.add(treeView.getRow(currentEntry) + 1, 0L);
-        getUnknown72.add(treeView.getRow(currentEntry) + 1, 0L);
-        getUnknown80.add(treeView.getRow(currentEntry) + 1, 0L);
-        getUnknown88.add(treeView.getRow(currentEntry) + 1, 0L);
-        getUnknown104.add(treeView.getRow(currentEntry) + 1, 0L);
-
+        bcmEntries.add(treeView.getRow(currentEntry) + 1, new BcmEntry());
         allEntries.add(treeView.getRow(currentEntry) + 1, newChild);
-
-       
         int[] index = {0};
         renameTreeItems(treeView.getRoot(), index);
-
-        
-        tabPane.getTabs().get(0).setContent(null);
-        tabPane.getTabs().get(1).setContent(null);
-        tabPane.getTabs().get(2).setContent(null);
-        tabPane.getTabs().get(3).setContent(null);
-        tabPane.getTabs().get(4).setContent(null);
-
-        tabPane.getTabs().get(0).setContent(createInputsVBox(treeView.getRow(currentEntry)));
-        tabPane.getTabs().get(1).setContent(createActivatorScrollPane(treeView.getRow(currentEntry)));
-        tabPane.getTabs().get(2).setContent(createBACVBox(treeView.getRow(currentEntry)));
-        tabPane.getTabs().get(3).setContent(createMiscVBox(treeView.getRow(currentEntry)));
-        tabPane.getTabs().get(4).setContent(createUnknownVBox(treeView.getRow(currentEntry)));
     }
 
     public void AddComment(){
@@ -4213,7 +3902,7 @@ public class Bcm {
             }
 
             for(int i=0;i<entries;i++){
-                
+                BcmEntry bcmEntry = new BcmEntry();
                 int entryStartOffset = 16 + (i * 112);
                 int siblingOffset = entryStartOffset + 48;
                 int childOffset = entryStartOffset + 52;
@@ -4222,104 +3911,103 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown0.add(toUint32(intBuffer.getInt()));
+                bcmEntry.unknown0 = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+4);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getDirectionalInputs.add(toUint32(intBuffer.getInt()));
+                bcmEntry.directionalInputs = toUint32(intBuffer.getInt());
                 
                 channel.position(entryStartOffset+8);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getButtonInputs.add(toUint32(intBuffer.getInt()));
+                bcmEntry.buttonInputs = toUint32(intBuffer.getInt());
             
                 channel.position(entryStartOffset+12);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getHoldDownConditions.add(toUint32(intBuffer.getInt()));
-                
+                bcmEntry.holdDownConditions = toUint32(intBuffer.getInt());
                 
                 channel.position(entryStartOffset+16);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getOpponentSizeConditions.add(toUint32(intBuffer.getInt()));
+                bcmEntry.opponentSizeConditions = toUint32(intBuffer.getInt());
                 
                 channel.position(entryStartOffset+20);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getMinimumLoopDuration.add(toUShort(shortBuffer.getShort()));
+                bcmEntry.minimumLoopDuration = toUShort(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+22);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getMaximumLoopDuration.add(toUShort(shortBuffer.getShort()));
+                bcmEntry.maximumLoopDuration = toUShort(shortBuffer.getShort());
 
                 channel.position(entryStartOffset+24);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getPrimaryActivatorConditions.add(toUint32(intBuffer.getInt()));
+                bcmEntry.primaryActivatorConditions = toUint32(intBuffer.getInt());
                 
                 channel.position(entryStartOffset+28);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getActivatorState.add(toUint32(intBuffer.getInt()));
+                bcmEntry.activatorState = toUint32(intBuffer.getInt());
               
                 channel.position(entryStartOffset+32);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryPrimary.add(shortBuffer.getShort());
+                bcmEntry.bacEntryPrimary = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+34);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryCharge.add(shortBuffer.getShort());
+                bcmEntry.bacEntryCharge = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+36);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getUnknown36.add(shortBuffer.getShort());
+                bcmEntry.unknown36 = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+38);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryUserConnect.add(shortBuffer.getShort());
+                bcmEntry.bacEntryUserConnect = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+40);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryVictimConnect.add(shortBuffer.getShort());
+                bcmEntry.bacEntryVictimConnect = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+42);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryAirborne.add(shortBuffer.getShort());
+                bcmEntry.bacEntryAirborne = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+44);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACEntryTargetingOverride.add(toUShort(shortBuffer.getShort()));
+                bcmEntry.bacEntryTargetingOverride = toUShort(shortBuffer.getShort());
                 
                 channel.position(entryStartOffset+46);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getBACRandomFlags.add(toUShort(shortBuffer.getShort()));
+                bcmEntry.bacRandomFlags = toUShort(shortBuffer.getShort());
                
                 channel.position(siblingOffset);
                 intBuffer.clear();
@@ -4350,80 +4038,80 @@ public class Bcm {
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiCost.add(toUint32(intBuffer.getInt()));
+                bcmEntry.kiCost = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+68);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown68.add(toUint32(intBuffer.getInt()));
+                bcmEntry.unknown68 = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+72);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown72.add(toUint32(intBuffer.getInt()));
+                bcmEntry.unknown72 = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+76);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getReceiverLinkId.add(toUint32(intBuffer.getInt()));
+                bcmEntry.receiverLinkId = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+80);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown80.add(toUint32(intBuffer.getInt()));
+                bcmEntry.unknown80 = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+84);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getStaminaCost.add(toUint32(intBuffer.getInt()));
+                bcmEntry.staminaCost = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+88);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown88.add(toUint32(intBuffer.getInt()));
+                bcmEntry.unknown88 = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+92);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getKiRequired.add(toUint32(intBuffer.getInt()));
+                bcmEntry.kiRequired = toUint32(intBuffer.getInt());
 
                 channel.position(entryStartOffset+96);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getHealthRequired.add(intBuffer.getFloat());
+                bcmEntry.healthRequired = intBuffer.getFloat();
 
                 channel.position(entryStartOffset+100);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getTransformationStage.add(shortBuffer.getShort());
+                bcmEntry.transformationStage = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+102);
                 shortBuffer.clear();
                 channel.read(shortBuffer);
                 shortBuffer.flip();
-                getCusAura.add(shortBuffer.getShort());
+                bcmEntry.cusAura = shortBuffer.getShort();
 
                 channel.position(entryStartOffset+104);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getUnknown104.add((toUint32(intBuffer.getInt())));
+                bcmEntry.unknown104 = toUint32(intBuffer.getInt());
                 
                 channel.position(entryStartOffset+108);
                 intBuffer.clear();
                 channel.read(intBuffer);
                 intBuffer.flip();
-                getRaceGender.add(toUint32(intBuffer.getInt()));
-                
+                bcmEntry.raceGender = toUint32(intBuffer.getInt());
+                bcmEntries.add(bcmEntry);
             }
         }
         catch (IOException e) {
@@ -4460,115 +4148,112 @@ public class Bcm {
             channel.write(intBuffer);
             
             for(int i=0;i<allEntries.size();i++){
+                BcmEntry bcmEntry = bcmEntries.get(i);
                 int entryStartOffset = 16 + (112 * i);
                 int siblingOffset = entryStartOffset + 48;
                 int childOffset = entryStartOffset + 52;
                 int rootParentOffset=entryStartOffset+56;
                 int parentOffset=entryStartOffset+60;
-                try {
-                    channel.position(entryStartOffset);
-                    intBuffer.clear();
-                    intBuffer.putInt((getUnknown0.get(i).intValue()));
-                    intBuffer.flip();
-                    channel.write(intBuffer);
-                    
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 
+                channel.position(entryStartOffset);
+                intBuffer.clear();
+                intBuffer.putInt(((int)bcmEntry.unknown0));
+                intBuffer.flip();
+                channel.write(intBuffer);
+                    
                 channel.position(entryStartOffset+4);
                 intBuffer.clear();
-                intBuffer.putInt(getDirectionalInputs.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.directionalInputs);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+8);
                 intBuffer.clear();
-                intBuffer.putInt(getButtonInputs.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.buttonInputs);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+12);
                 intBuffer.clear();
-                intBuffer.putInt(getHoldDownConditions.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.holdDownConditions);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+16);
                 intBuffer.clear();
-                intBuffer.putInt(getOpponentSizeConditions.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.opponentSizeConditions);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+20);
                 shortBuffer.clear();
-                shortBuffer.putShort(getMinimumLoopDuration.get(i).shortValue());
+                shortBuffer.putShort((short)bcmEntry.minimumLoopDuration);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+22);
                 shortBuffer.clear();
-                shortBuffer.putShort(getMaximumLoopDuration.get(i).shortValue());
+                shortBuffer.putShort((short)bcmEntry.maximumLoopDuration);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+24);
                 intBuffer.clear();
-                intBuffer.putInt(getPrimaryActivatorConditions.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.primaryActivatorConditions);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+28);
                 intBuffer.clear();
-                intBuffer.putInt(getActivatorState.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.activatorState);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+32);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryPrimary.get(i));
+                shortBuffer.putShort(bcmEntry.bacEntryPrimary);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+34);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryCharge.get(i));
+                shortBuffer.putShort(bcmEntry.bacEntryCharge);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+36);
                 shortBuffer.clear();
-                shortBuffer.putShort(getUnknown36.get(i));
+                shortBuffer.putShort(bcmEntry.unknown36);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+38);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryUserConnect.get(i));
+                shortBuffer.putShort(bcmEntry.bacEntryUserConnect);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+40);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryVictimConnect.get(i));
+                shortBuffer.putShort(bcmEntry.bacEntryVictimConnect);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+42);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryAirborne.get(i));
+                shortBuffer.putShort(bcmEntry.bacEntryAirborne);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+44);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACEntryTargetingOverride.get(i).shortValue());
+                shortBuffer.putShort((short)bcmEntry.bacEntryTargetingOverride);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
                 channel.position(entryStartOffset+46);
                 shortBuffer.clear();
-                shortBuffer.putShort(getBACRandomFlags.get(i).shortValue());
+                shortBuffer.putShort((short)bcmEntry.bacRandomFlags);
                 shortBuffer.flip();
                 channel.write(shortBuffer);
 
@@ -4622,79 +4307,79 @@ public class Bcm {
              
                 channel.position(entryStartOffset+64);
                 intBuffer.clear();
-                intBuffer.putInt(getKiCost.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.kiCost);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+68);
                 intBuffer.clear();
-                intBuffer.putInt(getUnknown68.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.unknown68);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+72);
                 intBuffer.clear();
-                intBuffer.putInt(getUnknown72.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.unknown72);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+76);
                 intBuffer.clear();
-                intBuffer.putInt(getReceiverLinkId.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.receiverLinkId);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+80);
                 intBuffer.clear();
-                intBuffer.putInt(getUnknown80.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.unknown80);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+84);
                 intBuffer.clear();
-                intBuffer.putInt(getStaminaCost.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.staminaCost);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+88);
                 intBuffer.clear();
-                intBuffer.putInt(getUnknown88.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.unknown88);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+92);
                 intBuffer.clear();
-                intBuffer.putInt(getKiRequired.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.kiRequired);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+96);
                 intBuffer.clear();
-                intBuffer.putFloat(getHealthRequired.get(i));
+                intBuffer.putFloat(bcmEntry.healthRequired);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+100);
                 intBuffer.clear();
-                intBuffer.putInt(getTransformationStage.get(i));
+                intBuffer.putInt(bcmEntry.transformationStage);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+102);
                 intBuffer.clear();
-                intBuffer.putInt(getCusAura.get(i));
+                intBuffer.putInt(bcmEntry.cusAura);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+104);
                 intBuffer.clear();
-                intBuffer.putInt(getUnknown104.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.unknown104);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(entryStartOffset+108);
                 intBuffer.clear();
-                intBuffer.putInt(getRaceGender.get(i).intValue());
+                intBuffer.putInt((int)bcmEntry.raceGender);
                 intBuffer.flip();
                 channel.write(intBuffer);
             }
@@ -4702,5 +4387,83 @@ public class Bcm {
          catch (IOException e) {
             System.err.println(e);
         }
+    }
+}
+
+class BcmEntry {
+    // Inputs
+    public long directionalInputs;
+    public long buttonInputs;
+    public long holdDownConditions;
+    
+    // Activator
+    public long opponentSizeConditions;
+    public int minimumLoopDuration;
+    public int maximumLoopDuration;
+    public long primaryActivatorConditions;
+    public long activatorState;
+
+    // BAC
+    public short bacEntryPrimary;
+    public short bacEntryCharge;
+    public short bacEntryUserConnect;
+    public short bacEntryVictimConnect;
+    public short bacEntryAirborne;
+    public int bacEntryTargetingOverride;
+    public int bacRandomFlags;
+
+    // Misc
+    public long kiCost;
+    public long receiverLinkId;
+    public long staminaCost;
+    public long kiRequired;
+    public float healthRequired;
+    public short transformationStage;
+    public short cusAura;
+    public long raceGender;
+
+    // Unknowns
+    public long unknown0;
+    public short unknown36;
+    public long unknown68;
+    public long unknown72;
+    public long unknown80;
+    public long unknown88;
+    public long unknown104;
+
+    // Empty Constructor
+    public BcmEntry() {}
+
+    public BcmEntry(BcmEntry other) {
+        this.directionalInputs = other.directionalInputs;
+        this.buttonInputs = other.buttonInputs;
+        this.holdDownConditions = other.holdDownConditions;
+        this.opponentSizeConditions = other.opponentSizeConditions;
+        this.minimumLoopDuration = other.minimumLoopDuration;
+        this.maximumLoopDuration = other.maximumLoopDuration;
+        this.primaryActivatorConditions = other.primaryActivatorConditions;
+        this.activatorState = other.activatorState;
+        this.bacEntryPrimary = other.bacEntryPrimary;
+        this.bacEntryCharge = other.bacEntryCharge;
+        this.bacEntryUserConnect = other.bacEntryUserConnect;
+        this.bacEntryVictimConnect = other.bacEntryVictimConnect;
+        this.bacEntryAirborne = other.bacEntryAirborne;
+        this.bacEntryTargetingOverride = other.bacEntryTargetingOverride;
+        this.bacRandomFlags = other.bacRandomFlags;
+        this.kiCost = other.kiCost;
+        this.receiverLinkId = other.receiverLinkId;
+        this.staminaCost = other.staminaCost;
+        this.kiRequired = other.kiRequired;
+        this.healthRequired = other.healthRequired;
+        this.transformationStage = other.transformationStage;
+        this.cusAura = other.cusAura;
+        this.raceGender = other.raceGender;
+        this.unknown0 = other.unknown0;
+        this.unknown36 = other.unknown36;
+        this.unknown68 = other.unknown68;
+        this.unknown72 = other.unknown72;
+        this.unknown80 = other.unknown80;
+        this.unknown88 = other.unknown88;
+        this.unknown104 = other.unknown104;
     }
 }
