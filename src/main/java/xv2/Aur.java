@@ -651,7 +651,7 @@ public class Aur {
             channel.write(ByteBuffer.wrap(auraTypes.getBytes(StandardCharsets.ISO_8859_1)));
 
             for(int i=0;i<allEntries.size();i++){
-                AurAuraEntry entry = auraEntries.get(i);
+                AurAuraEntry auraEntry = auraEntries.get(i);
                 //writing aura id initial
                 channel.position(auraOffset+(16*i));
                 intBuffer.clear();
@@ -662,7 +662,7 @@ public class Aur {
                 //writing i04
                 channel.position(auraOffset+(16*i)+4);
                 intBuffer.clear();
-                intBuffer.putInt(entry.i04);
+                intBuffer.putInt(auraEntry.i04);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -683,7 +683,7 @@ public class Aur {
                 //writing boostStart
                 channel.position(allEntries.size()*16+32+56*i+4);
                 intBuffer.clear();
-                intBuffer.putInt(entry.boostStart);
+                intBuffer.putInt(auraEntry.boostStart);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -694,7 +694,7 @@ public class Aur {
                 //write boostLoop
                 channel.position(allEntries.size()*16+32+56*i+12);
                 intBuffer.clear();
-                intBuffer.putInt(entry.boostLoop);
+                intBuffer.putInt(auraEntry.boostLoop);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -705,7 +705,7 @@ public class Aur {
                 //write boostEnd
                 channel.position(allEntries.size()*16+32+56*i+20);
                 intBuffer.clear();
-                intBuffer.putInt(entry.boostEnd);
+                intBuffer.putInt(auraEntry.boostEnd);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -716,7 +716,7 @@ public class Aur {
                 //write kiai charge
                 channel.position(allEntries.size()*16+32+56*i+28);
                 intBuffer.clear();
-                intBuffer.putInt(entry.kiaiCharge);
+                intBuffer.putInt(auraEntry.kiaiCharge);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -727,7 +727,7 @@ public class Aur {
                 //write kiryoku max
                 channel.position(allEntries.size()*16+32+56*i+36);
                 intBuffer.clear();
-                intBuffer.putInt(entry.kiryokuMax);
+                intBuffer.putInt(auraEntry.kiryokuMax);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -738,7 +738,7 @@ public class Aur {
                 //werite henshin start
                 channel.position(allEntries.size()*16+32+56*i+44);
                 intBuffer.clear();
-                intBuffer.putInt(entry.henshinStart);
+                intBuffer.putInt(auraEntry.henshinStart);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
@@ -749,34 +749,34 @@ public class Aur {
                 //writing henshin end
                 channel.position(allEntries.size()*16+32+56*i+52);
                 intBuffer.clear();
-                intBuffer.putInt(entry.henshinEnd);
+                intBuffer.putInt(auraEntry.henshinEnd);
                 intBuffer.flip();
                 channel.write(intBuffer);
             }
             for(int i=0;i<characterEntries;i++){
-                AurCharaEntry chara = charaEntries.get(i);
+                AurCharaEntry charaEntry = charaEntries.get(i);
             
                 channel.position(charaOffset+(16*i));
                 intBuffer.clear();
-                intBuffer.putInt(chara.charaId);
+                intBuffer.putInt(charaEntry.charaId);
                 intBuffer.flip();
                 channel.write(intBuffer);
     
                 channel.position(charaOffset+(16*i)+4);
                 intBuffer.clear();
-                intBuffer.putInt(chara.costume);
+                intBuffer.putInt(charaEntry.costume);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(charaOffset+(16*i)+8);
                 intBuffer.clear();
-                intBuffer.putInt(chara.auraId);
+                intBuffer.putInt(charaEntry.auraId);
                 intBuffer.flip();
                 channel.write(intBuffer);
 
                 channel.position(charaOffset+(16*i)+12);
                 intBuffer.clear();
-                intBuffer.putInt(chara.glare ? 1 : 0);
+                intBuffer.putInt(charaEntry.glare ? 1 : 0);
                 intBuffer.flip();
                 channel.write(intBuffer);
             }
