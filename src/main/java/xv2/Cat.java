@@ -287,6 +287,8 @@ public class Cat {
     }
 
     private void Paste(){
+        if(copyContainer == null) return;
+        
         catEntries.set(listView.getSelectionModel().getSelectedIndex(), new CatEntry(copyContainer));
         outerHBox.getChildren().remove(1);
         outerHBox.getChildren().set(1, createVBox(catEntries.get(listView.getSelectionModel().getSelectedIndex())));

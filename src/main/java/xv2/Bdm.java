@@ -2449,7 +2449,8 @@ public class Bdm {
     }
 
     private void Paste() {
-        if (copyContainer == null) return;
+        if(copyContainer.isEmpty()) return;
+
         bdmEntries.set(listView.getSelectionModel().getSelectedIndex(),copyContainer.get(0));
         ((TabPane) mainTabPane.getTabs().get(mainTabPane.getSelectionModel().getSelectedIndex()).getContent()).getTabs().get(0).setContent(createMainVBox(bdmEntries.get(listView.getSelectionModel().getSelectedIndex()).subEntries[mainTabPane.getSelectionModel().getSelectedIndex()]));
         ((TabPane) mainTabPane.getTabs().get(mainTabPane.getSelectionModel().getSelectedIndex()).getContent()).getTabs().get(1).setContent(createAnimationVBox(bdmEntries.get(listView.getSelectionModel().getSelectedIndex()).subEntries[mainTabPane.getSelectionModel().getSelectedIndex()]));
@@ -2459,6 +2460,7 @@ public class Bdm {
         ((TabPane) mainTabPane.getTabs().get(mainTabPane.getSelectionModel().getSelectedIndex()).getContent()).getTabs().get(5).setContent(createCameraVBox(bdmEntries.get(listView.getSelectionModel().getSelectedIndex()).subEntries[mainTabPane.getSelectionModel().getSelectedIndex()]));
         ((TabPane) mainTabPane.getTabs().get(mainTabPane.getSelectionModel().getSelectedIndex()).getContent()).getTabs().get(6).setContent(createMiscVBox(bdmEntries.get(listView.getSelectionModel().getSelectedIndex()).subEntries[mainTabPane.getSelectionModel().getSelectedIndex()]));
         ((TabPane) mainTabPane.getTabs().get(mainTabPane.getSelectionModel().getSelectedIndex()).getContent()).getTabs().get(7).setContent(createUnknownVBox(bdmEntries.get(listView.getSelectionModel().getSelectedIndex()).subEntries[mainTabPane.getSelectionModel().getSelectedIndex()]));
+        
     }
 
     private void Delete() {

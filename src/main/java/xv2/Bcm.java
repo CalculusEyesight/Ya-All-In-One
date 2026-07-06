@@ -3786,9 +3786,10 @@ public class Bcm {
         copyContainer = new BcmEntry(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex()));
     }
     private void Paste() {
-        if (currentEntry == null) {
+        if (currentEntry == null || copyContainer == null) {
             return;
         }
+        
         bcmEntries.set(treeView.getSelectionModel().getSelectedIndex(), new BcmEntry(copyContainer));
 
         if (treeView.getSelectionModel().getSelectedItem() != null) {

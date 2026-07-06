@@ -354,6 +354,8 @@ public class Aur {
     }
 
     private void Paste(){
+        if(copyContainer == null) return;
+
         auraEntries.set(listView.getSelectionModel().getSelectedIndex(), new AurAuraEntry(copyContainer));
         hBox.getChildren().remove(1);
         hBox.getChildren().set(1, createVBoxAuraId(auraEntries.get(listView.getSelectionModel().getSelectedIndex())));
