@@ -2509,11 +2509,11 @@ public class Bdm {
                 case 1284:
                     allEntries=new ArrayList<>(bdmEntriesCount);
                     for(int i=0;i<bdmEntriesCount;i++){
-                        BdmEntry entry = new BdmEntry();
+                        BdmEntry bdmEntry = new BdmEntry();
                         allEntries.add(new String("Entry "+i));
                         listView.getItems().add(allEntries.get(i));
                         for(int j=0;j<10;j++){
-                            BdmSubEntry subEntry = entry.subEntries[j];
+                            BdmSubEntry subEntry = bdmEntry.subEntries[j];
                             channel.position(entryOffset+4+128*j+1284*i);
                             shortBuffer.clear();
                             channel.read(shortBuffer);
@@ -2716,7 +2716,7 @@ public class Bdm {
                             shortBuffer.clear();
                             channel.read(shortBuffer);
                             shortBuffer.flip();
-                           subEntry.victimInvincibilityTime = shortBuffer.getShort();
+                            subEntry.victimInvincibilityTime = shortBuffer.getShort();
 
                             channel.position(entryOffset+86+128*j+1284*i);
                             shortBuffer.clear();
@@ -2844,7 +2844,7 @@ public class Bdm {
                             intBuffer.flip();
                             subEntry.victimAnimationSpeed = intBuffer.getFloat();
                         }
-                        bdmEntries.add(entry);
+                        bdmEntries.add(bdmEntry);
                     }
                     break;
             
@@ -2884,14 +2884,14 @@ public class Bdm {
             channel.write(intBuffer);
 
             for(int i=0;i<allEntries.size();i++){
-                BdmEntry entry = bdmEntries.get(i);
+                BdmEntry bdmEntry = bdmEntries.get(i);
                 channel.position(entryOffset+1284*i);
                 intBuffer.clear();
                 intBuffer.putInt(i);
                 intBuffer.flip();
                 channel.write(intBuffer);
                 for(int j=0;j<10;j++){
-                    BdmSubEntry subEntry = entry.subEntries[j];
+                    BdmSubEntry subEntry = bdmEntry.subEntries[j];
                     channel.position(entryOffset+4+128*j+1284*i);
                     shortBuffer.clear();
                     shortBuffer.putShort((short)subEntry.damageType);
@@ -3248,7 +3248,6 @@ class BdmEntry {
             subEntries[i] = new BdmSubEntry();
         }
     }
-
 
     public BdmEntry(BdmEntry other) {
         for (int i = 0; i < 10; i++) {
