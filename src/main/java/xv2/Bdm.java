@@ -102,8 +102,7 @@ public class Bdm {
 
     public TabPane createSubTabPane(){
         TabPane subTabPane = new TabPane();
-        
-
+    
         Tab mainTab=new Tab("Main");
         Tab animationTab=new Tab("Animation");
         Tab soundTab=new Tab("Sound");
