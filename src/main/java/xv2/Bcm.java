@@ -41,7 +41,7 @@ public class Bcm {
 
    ArrayList <BcmEntry> bcmEntries = new ArrayList<>();
 
-    private BcmEntry copyBcmEntryBuffer = null;
+    private BcmEntry copyContainer = null;
   
     public Bcm(){
         entriesActionListener();
@@ -3783,13 +3783,13 @@ public class Bcm {
             return;
         }
 
-        copyBcmEntryBuffer = new BcmEntry(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex()));
+        copyContainer = new BcmEntry(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex()));
     }
     private void Paste() {
         if (currentEntry == null) {
             return;
         }
-        bcmEntries.set(treeView.getSelectionModel().getSelectedIndex(), new BcmEntry(copyBcmEntryBuffer));
+        bcmEntries.set(treeView.getSelectionModel().getSelectedIndex(), new BcmEntry(copyContainer));
 
         if (treeView.getSelectionModel().getSelectedItem() != null) {
             tabPane.getTabs().get(0).setContent(createInputsVBox(bcmEntries.get(treeView.getSelectionModel().getSelectedIndex())));
