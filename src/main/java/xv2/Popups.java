@@ -51,4 +51,11 @@ public class Popups {
         alert.setContentText("Bdm file format is a legacy format not supported by the tool");
         alert.showAndWait();
     }
+    public static void ImageDataNotSupported (){
+        Toolkit.getDefaultToolkit().beep();
+        Alert alert=new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText("Image file type not supported");
+        alert.showAndWait();
+    }
 }
