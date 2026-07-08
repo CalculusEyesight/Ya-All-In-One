@@ -28,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 public class Emb {
     private int embEntries=0;
@@ -110,8 +111,11 @@ public class Emb {
             Image image= SwingFXUtils.toFXImage(bufferedImage, null);
             imageView.setImage(image);
             
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NullPointerException | IOException e) {
+            Platform.runLater(()->{
+                Popups.ImageDataNotSupported();
+            });
+            return null;
         }
         
         StackPane imageContainer=new StackPane(imageView);
@@ -133,8 +137,14 @@ public class Emb {
                 return;
             }
             //System.out.println("entry clicked: "+listView.getSelectionModel().getSelectedIndex());
-            hBox.getChildren().remove(1);
-            hBox.getChildren().set(1,createImageView(listView.getSelectionModel().getSelectedIndex()));
+            try {
+                hBox.getChildren().remove(1);
+                hBox.getChildren().set(1,createImageView(listView.getSelectionModel().getSelectedIndex()));
+                
+            } catch (IndexOutOfBoundsException e) {
+                return;
+            }
+            
         });
         listView.setOnMouseClicked(e->{
             if(e.getButton()==MouseButton.SECONDARY){
