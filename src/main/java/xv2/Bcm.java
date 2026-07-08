@@ -3048,7 +3048,7 @@ public class Bcm {
         Label BACEntryPrimaryLabel=new Label("BAC Entry Primary");
         BACEntryPrimaryLabel.setPrefWidth(160);
         
-        Spinner<Integer> BACEntryPrimarySpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.bacEntryPrimary);
+        Spinner<Integer> BACEntryPrimarySpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.bacEntryPrimary);
         BACEntryPrimarySpinner.setEditable(true);
         BACEntryPrimarySpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3066,7 +3066,7 @@ public class Bcm {
         Label BACEntryChargeLabel=new Label("BAC Entry Charge");
         BACEntryChargeLabel.setPrefWidth(160);
 
-        Spinner<Integer> BACEntryChargeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.bacEntryCharge);
+        Spinner<Integer> BACEntryChargeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.bacEntryCharge);
         BACEntryChargeSpinner.setEditable(true);
         BACEntryChargeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3084,7 +3084,7 @@ public class Bcm {
         Label BACEntryUserConnectLabel=new Label("BAC Entry User Connect");
         BACEntryUserConnectLabel.setPrefWidth(160);
 
-        Spinner<Integer> BACEntryUserConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.bacEntryUserConnect);
+        Spinner<Integer> BACEntryUserConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.bacEntryUserConnect);
         BACEntryUserConnectSpinner.setEditable(true);
         BACEntryUserConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3102,7 +3102,7 @@ public class Bcm {
         Label BACEntryVictimConnectLabel=new Label("BAC Entry Victim Connect");
         BACEntryVictimConnectLabel.setPrefWidth(160);
         
-        Spinner<Integer> BACEntryVictimConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.bacEntryVictimConnect);
+        Spinner<Integer> BACEntryVictimConnectSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.bacEntryVictimConnect);
         BACEntryVictimConnectSpinner.setEditable(true);
         BACEntryVictimConnectSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3120,7 +3120,7 @@ public class Bcm {
         Label BACEntryAirborneLabel=new Label("BAC Entry Airborne");
         BACEntryAirborneLabel.setPrefWidth(160);
 
-        Spinner<Integer> BACEntryAirborneSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.bacEntryAirborne);
+        Spinner<Integer> BACEntryAirborneSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.bacEntryAirborne);
         BACEntryAirborneSpinner.setEditable(true);
         BACEntryAirborneSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3367,7 +3367,7 @@ public class Bcm {
         Label transformationStageLabel=new Label("Transformation Stage");
         transformationStageLabel.setPrefWidth(160);
 
-        Spinner<Integer> transformationStageSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.transformationStage);
+        Spinner<Integer> transformationStageSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.transformationStage);
         transformationStageSpinner.setEditable(true);
         transformationStageSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -3385,7 +3385,7 @@ public class Bcm {
         Label cusAuraLabel=new Label("CUS Aura");
         cusAuraLabel.setPrefWidth(160);
 
-        Spinner<Integer> cusAuraSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)entry.cusAura);
+        Spinner<Integer> cusAuraSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,entry.cusAura);
         cusAuraSpinner.setEditable(true);
         cusAuraSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){

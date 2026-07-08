@@ -804,7 +804,7 @@ public class Bdm {
         Label cueIdSpeed=new Label("Cue Id");
         cueIdSpeed.setPrefWidth(100);
 
-        Spinner<Integer> cueIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.cueId);
+        Spinner<Integer> cueIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.cueId);
         cueIdSpinner.setEditable(true);
         cueIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -831,7 +831,7 @@ public class Bdm {
         Label effect1IdLabel=new Label("Effect 1 Id");
         effect1IdLabel.setPrefWidth(160);
 
-        Spinner<Integer> effect1IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.effect1Id);
+        Spinner<Integer> effect1IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.effect1Id);
         effect1IdSpinner.setEditable(true);
         effect1IdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -981,7 +981,7 @@ public class Bdm {
         Label effect2IdLabel=new Label("Effect 2 Id");
         effect2IdLabel.setPrefWidth(160);
 
-        Spinner<Integer> effect2IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.effect2Id);
+        Spinner<Integer> effect2IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.effect2Id);
         effect2IdSpinner.setEditable(true);
         effect2IdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -1131,7 +1131,7 @@ public class Bdm {
         Label effect3IdLabel=new Label("Effect 3 Id");
         effect3IdLabel.setPrefWidth(160);
 
-        Spinner<Integer> effect3IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.effect3Id);
+        Spinner<Integer> effect3IdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.effect3Id);
         effect3IdSpinner.setEditable(true);
         effect3IdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -1508,7 +1508,7 @@ public class Bdm {
         Label victimInvincibilityTimeLabel=new Label("Victim Invincibility Time");
         victimInvincibilityTimeLabel.setPrefWidth(200);
 
-        Spinner<Integer> victimInvincibilityTimeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.victimInvincibilityTime);
+        Spinner<Integer> victimInvincibilityTimeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.victimInvincibilityTime);
         victimInvincibilityTimeSpinner.setEditable(true);
         victimInvincibilityTimeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -1537,7 +1537,7 @@ public class Bdm {
         cameraShakeTypeLabel.setPrefWidth(150);
         Label cameraShakeTypeIndicatorLabel = new Label();
 
-        Spinner<Integer> cameraShakeTypeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.cameraShakeType);
+        Spinner<Integer> cameraShakeTypeSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.cameraShakeType);
         cameraShakeTypeSpinner.setEditable(true);
         cameraShakeTypeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -1586,7 +1586,7 @@ public class Bdm {
         Label userBpeIdLabel=new Label("User Bpe Id");
         userBpeIdLabel.setPrefWidth(150);
 
-        Spinner<Integer> userBpeIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.userBpeID);
+        Spinner<Integer> userBpeIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.userBpeID);
         userBpeIdSpinner.setEditable(true);
         userBpeIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -1605,7 +1605,7 @@ public class Bdm {
         Label victimBpeIdLabel=new Label("Victim Bpe Id");
         victimBpeIdLabel.setPrefWidth(150);
 
-        Spinner<Integer> victimBpeIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,(int)subEntry.victimBpeID);
+        Spinner<Integer> victimBpeIdSpinner=new Spinner<>(Short.MIN_VALUE,Short.MAX_VALUE,subEntry.victimBpeID);
         victimBpeIdSpinner.setEditable(true);
         victimBpeIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -2038,7 +2038,7 @@ public class Bdm {
         Label staminaBrokenOverrideBdmIdLabel=new Label("Stamina Broken Override Bdm Id");
         staminaBrokenOverrideBdmIdLabel.setPrefWidth(180);
 
-        Spinner<Integer> staminaBrokenOverrideBdmIdSpinner=new Spinner<>(0,65535,(int)subEntry.staminaBrokenOverrideBdmId);
+        Spinner<Integer> staminaBrokenOverrideBdmIdSpinner=new Spinner<>(0,65535,subEntry.staminaBrokenOverrideBdmId);
         staminaBrokenOverrideBdmIdSpinner.setEditable(true);
         staminaBrokenOverrideBdmIdSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
@@ -2057,7 +2057,7 @@ public class Bdm {
         Label szVanishEnableTimeLabel=new Label("Z Vanish Enable Time");
         szVanishEnableTimeLabel.setPrefWidth(180);
 
-        Spinner<Integer> zVanishEnableTimeSpinner=new Spinner<>(0,65535,(int)subEntry.zVanishEnableTime);
+        Spinner<Integer> zVanishEnableTimeSpinner=new Spinner<>(0,65535,subEntry.zVanishEnableTime);
         zVanishEnableTimeSpinner.setEditable(true);
         zVanishEnableTimeSpinner.valueProperty().addListener((obs,oldValue,newValue)->{
             if(newValue!=null){
