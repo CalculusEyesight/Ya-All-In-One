@@ -16,11 +16,12 @@ A big thank you to the people who have worked and have been updating the [Xv2Cor
 |.bcm| ✅ |
 |.bcs| ❌ |
 |.bdm| ✅ |
-|.bsa| ❌ |
+|.bsa| ✅ |
+|.cat| ✅ |
 |.ean| ❌ |
 |.emb| ✅ |
 
 ## Packaging 
-jpackage --type app-image -i inputDir  -n Ya-All-In-One --main-class xv2.Launcher  --main-jar exportedJar.jar --icon iconPath  
+jpackage --type app-image -i inputDir  -n "All-In-One Organiser" --main-class xv2.Launcher  --main-jar exportedJar.jar --icon iconPath  
 --vendor CalculusEyesight
 
